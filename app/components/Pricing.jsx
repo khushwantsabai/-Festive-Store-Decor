@@ -1,15 +1,31 @@
 import React from 'react';
-import { Check, Star, Zap, Shield, Crown, X } from 'lucide-react';
+import { Check, Star, Zap, Shield, Crown, X, AlertCircle } from 'lucide-react';
+import { useSubmit, useActionData } from 'react-router';
 
-export default function Pricing() {
+export default function Pricing({ isSubmitting }) {
+  const submit = useSubmit();
+  const actionData = useActionData();
+
+  const handleUpgrade = (plan) => {
+    submit({ plan }, { method: 'post' });
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem 0' }}>
+      {actionData?.billingError && (
+        <div style={{ backgroundColor: '#FEE2E2', border: '1px solid #EF4444', color: '#B91C1C', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', margin: '0 auto', maxWidth: '600px' }}>
+          <AlertCircle size={24} />
+          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.9rem' }}>
+            {JSON.stringify(actionData.billingError, null, 2)}
+          </pre>
+        </div>
+      )}
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>Simple, transparent pricing</h2>
         <p style={{ color: '#64748B', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>Choose the perfect plan for your store. Upgrade or downgrade at any time to match your business needs.</p>
       </div>
       
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', alignItems: 'stretch' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', alignItems: 'stretch' }}>
         
         {/* Free Plan */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)', transition: 'all 0.3s ease', cursor: 'default' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}>
@@ -46,7 +62,15 @@ export default function Pricing() {
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$49</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
-          <button style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0EA5E9', border: '2px solid #0EA5E9', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={(e) => { e.target.style.backgroundColor = '#F0F9FF'; }} onMouseLeave={(e) => { e.target.style.backgroundColor = 'white'; }}>Upgrade to Starter</button>
+          <button 
+            disabled={isSubmitting}
+            onClick={() => handleUpgrade('Starter Plan')}
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0EA5E9', border: '2px solid #0EA5E9', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: isSubmitting ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting) e.target.style.backgroundColor = '#F0F9FF'; }} 
+            onMouseLeave={(e) => { if(!isSubmitting) e.target.style.backgroundColor = 'white'; }}
+          >
+            {isSubmitting ? 'Processing...' : 'Upgrade to Starter'}
+          </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Free, plus:</p>
@@ -72,7 +96,15 @@ export default function Pricing() {
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: 'white' }}>$89</span> <span style={{ color: '#94A3B8', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
-          <button style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: 'pointer', transition: 'opacity 0.2s', boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)' }} onMouseEnter={(e) => e.target.style.opacity = '0.9'} onMouseLeave={(e) => e.target.style.opacity = '1'}>Upgrade to Pro</button>
+          <button 
+            disabled={isSubmitting}
+            onClick={() => handleUpgrade('Pro Plan')}
+            style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)', opacity: isSubmitting ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting) e.target.style.opacity = '0.9'; }} 
+            onMouseLeave={(e) => { if(!isSubmitting) e.target.style.opacity = '1'; }}
+          >
+            {isSubmitting ? 'Processing...' : 'Upgrade to Pro'}
+          </button>
           
           <div style={{ borderTop: '1px solid #1E293B', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: 'white', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Starter, plus:</p>
@@ -97,7 +129,15 @@ export default function Pricing() {
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$139</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
-          <button style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0F172A', border: '2px solid #E2E8F0', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={(e) => { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; }} onMouseLeave={(e) => { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; }}>Upgrade to Enterprise</button>
+          <button 
+            disabled={isSubmitting}
+            onClick={() => handleUpgrade('Enterprise Plan')}
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0F172A', border: '2px solid #E2E8F0', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: isSubmitting ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting) { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; } }} 
+            onMouseLeave={(e) => { if(!isSubmitting) { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; } }}
+          >
+            {isSubmitting ? 'Processing...' : 'Upgrade to Enterprise'}
+          </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Pro, plus:</p>

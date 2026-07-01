@@ -3,9 +3,15 @@ import {
   ApiVersion,
   AppDistribution,
   shopifyApp,
+  BillingInterval,
+  BillingReplacementBehavior,
 } from "@shopify/shopify-app-react-router/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
+
+export const MONTHLY_PLAN = 'Starter Plan';
+export const PRO_PLAN = 'Pro Plan';
+export const ENTERPRISE_PLAN = 'Enterprise Plan';
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -18,6 +24,32 @@ const shopify = shopifyApp({
   distribution: AppDistribution.AppStore,
   future: {
     expiringOfflineAccessTokens: true,
+  },
+  billing: {
+    [MONTHLY_PLAN]: {
+      replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
+      lineItems: [{
+        amount: 49,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      }],
+    },
+    [PRO_PLAN]: {
+      replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
+      lineItems: [{
+        amount: 89,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      }],
+    },
+    [ENTERPRISE_PLAN]: {
+      replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
+      lineItems: [{
+        amount: 139,
+        currencyCode: 'USD',
+        interval: BillingInterval.Every30Days,
+      }],
+    },
   },
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
