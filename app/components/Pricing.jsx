@@ -35,7 +35,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             <Star size={20} />
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: 0, color: '#0F172A' }}>Free</h3>
           </div>
-          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Perfect for getting started and testing the waters.</p>
+          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Basic decorations and templates to get your store into the festive spirit.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$0</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
@@ -51,12 +51,10 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's included</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: '#475569', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> 3 Active Campaigns</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> 10 Banner Templates</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> 5 Popups</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> Basic Snow Effect</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> Basic Countdown</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: '#94A3B8' }}><X size={18} color="#94A3B8" style={{ flexShrink: 0, marginTop: '2px' }} /> Shopify Branding Removal</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> 1 Banner Template</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> 1 Popup Template</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} /> Basic Customization</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: '#94A3B8' }}><X size={18} color="#94A3B8" style={{ flexShrink: 0, marginTop: '2px' }} /> Remove App Branding</li>
             </ul>
           </div>
         </div>
@@ -67,7 +65,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             <Zap size={20} />
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: 0, color: '#0F172A' }}>Starter</h3>
           </div>
-          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Great for growing stores needing more variety.</p>
+          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Unlock more templates, effects, and campaigns to boost seasonal sales.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$49</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
@@ -84,12 +82,10 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Free, plus:</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: '#475569', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> 20 Active Campaigns</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> 50 Templates</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> Unlimited Banners</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> Popup Builder</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> Holiday Themes</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> Email Support</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> 2 Banner Templates</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> 3 Popup Templates</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> Advanced Customization</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#0EA5E9" style={{ flexShrink: 0, marginTop: '2px' }} /> Remove App Branding</li>
             </ul>
           </div>
         </div>
@@ -118,12 +114,10 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
           <div style={{ borderTop: '1px solid #1E293B', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: 'white', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Starter, plus:</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: '#E2E8F0', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Unlimited Campaigns</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> 150+ Templates</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Advanced Animations</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Theme Builder</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> A/B Testing</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Geo-targeting</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> 4 Banner Templates</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> 5 Popup Templates</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Priority Email Support</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Early Access to New Features</li>
             </ul>
           </div>
         </div>
@@ -134,7 +128,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             <Crown size={20} />
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: 0, color: '#0F172A' }}>Enterprise</h3>
           </div>
-          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>For large brands requiring custom solutions.</p>
+          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Custom festive decorations, dedicated support, and multi-store setups.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$139</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
@@ -151,12 +145,10 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Pro, plus:</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: '#475569', listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Unlimited Stores</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Team Members</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> API Access</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Custom CSS/JS</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> White Label</li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Dedicated Support</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> All Current & Future Templates</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Custom Template Requests</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Dedicated Account Manager</li>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} /> Custom Integration Support</li>
             </ul>
           </div>
         </div>

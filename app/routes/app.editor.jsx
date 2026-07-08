@@ -4,7 +4,7 @@ import { useActionData, useSubmit, useNavigation, useLoaderData } from 'react-ro
 import Editor from '../components/Editor';
 import prisma from '../db.server';
 
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 
 export async function loader({ request }) {
   const { session, billing } = await authenticate.admin(request);
@@ -150,3 +150,14 @@ export default function EditorRoute() {
     />
   );
 }
+
+import { boundary } from "@shopify/shopify-app-react-router/server";
+import { useRouteError } from "react-router";
+
+export function ErrorBoundary() {
+  return boundary.error(useRouteError());
+}
+
+export const headers = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};

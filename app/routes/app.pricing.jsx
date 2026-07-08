@@ -63,3 +63,13 @@ export default function PricingRoute() {
   return <Pricing isSubmitting={isSubmitting} submittingPlan={submittingPlan} activePlan={activePlan} />;
 }
 
+import { boundary } from "@shopify/shopify-app-react-router/server";
+import { useRouteError } from "react-router";
+
+export function ErrorBoundary() {
+  return boundary.error(useRouteError());
+}
+
+export const headers = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
