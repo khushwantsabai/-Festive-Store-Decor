@@ -4,10 +4,44 @@ import { useActionData, useSubmit, useNavigation, useLoaderData } from 'react-ro
 import Editor from '../components/Editor';
 import prisma from '../db.server';
 
+import { redirect } from '@remix-run/node';
+
 export async function loader({ request }) {
-  const { session } = await authenticate.admin(request);
+  const { session, billing } = await authenticate.admin(request);
   const url = new URL(request.url);
   const draftId = url.searchParams.get('draftId');
+  const templateParam = url.searchParams.get('template');
+
+  let activePlan = 'Free';
+  try {
+    const billingCheck = await billing.check({
+      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+      isTest: true,
+    });
+    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
+      activePlan = billingCheck.appSubscriptions[0].name;
+    }
+  } catch (error) {
+    activePlan = 'Free';
+  }
+
+  // Enforce access control for editor
+  if (templateParam) {
+    const getRequiredPlan = (name) => {
+      if (name === 'Merry Christmas' || name === 'Christmas Popup') return null;
+      if (['Happy Diwali', 'Spin & Win Popup', 'Exit Intent Popup'].includes(name)) return 'Starter Plan';
+      if (['Valentine', 'Cyber Monday', 'New Year Popup', 'Flash Sale Popup'].includes(name)) return 'Pro Plan';
+      return 'Enterprise Plan';
+    };
+    
+    const requiredPlan = getRequiredPlan(templateParam);
+    if (requiredPlan) {
+      const planRanks = { 'Free': 0, 'Starter Plan': 1, 'Pro Plan': 2, 'Enterprise Plan': 3 };
+      if ((planRanks[activePlan] || 0) < planRanks[requiredPlan]) {
+        return redirect('/app/pricing');
+      }
+    }
+  }
 
   let draftData = null;
   if (draftId) {

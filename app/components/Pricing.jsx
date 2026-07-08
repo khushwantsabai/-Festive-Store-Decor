@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Check, Star, Zap, Shield, Crown, X, AlertCircle } from 'lucide-react';
 import { useSubmit, useActionData } from 'react-router';
 
-export default function Pricing({ isSubmitting, submittingPlan }) {
+export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Free' }) {
   const submit = useSubmit();
   const actionData = useActionData();
 
@@ -39,7 +39,14 @@ export default function Pricing({ isSubmitting, submittingPlan }) {
           <div style={{ margin: '0 0 2rem 0' }}>
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$0</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
-          <button style={{ width: '100%', padding: '0.75rem', backgroundColor: '#F1F5F9', color: '#0F172A', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: 'pointer', transition: 'background-color 0.2s' }} onMouseEnter={(e) => e.target.style.backgroundColor = '#E2E8F0'} onMouseLeave={(e) => e.target.style.backgroundColor = '#F1F5F9'}>Current Plan</button>
+          <button 
+            disabled={isSubmitting || activePlan === 'Free'}
+            onClick={() => handleUpgrade('Free')}
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: '#F1F5F9', color: '#0F172A', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Free') ? 'not-allowed' : 'pointer', transition: 'background-color 0.2s', opacity: (isSubmitting || activePlan === 'Free') ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Free') e.target.style.backgroundColor = '#E2E8F0'; }} 
+            onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Free') e.target.style.backgroundColor = '#F1F5F9'; }}>
+            {activePlan === 'Free' ? 'Current Plan' : isSubmitting && submittingPlan === 'Free' ? 'Processing...' : 'Downgrade to Free'}
+          </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
             <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>What's included</p>
@@ -65,13 +72,13 @@ export default function Pricing({ isSubmitting, submittingPlan }) {
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$49</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
-            disabled={isSubmitting}
+            disabled={isSubmitting || activePlan === 'Starter Plan'}
             onClick={() => handleUpgrade('Starter Plan')}
-            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0EA5E9', border: '2px solid #0EA5E9', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: isSubmitting ? 0.7 : 1 }} 
-            onMouseEnter={(e) => { if(!isSubmitting) e.target.style.backgroundColor = '#F0F9FF'; }} 
-            onMouseLeave={(e) => { if(!isSubmitting) e.target.style.backgroundColor = 'white'; }}
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0EA5E9', border: '2px solid #0EA5E9', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Starter Plan') ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: (isSubmitting || activePlan === 'Starter Plan') ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Starter Plan') e.target.style.backgroundColor = '#F0F9FF'; }} 
+            onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Starter Plan') e.target.style.backgroundColor = 'white'; }}
           >
-            {isSubmitting && submittingPlan === 'Starter Plan' ? 'Processing...' : 'Upgrade to Starter'}
+            {activePlan === 'Starter Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Starter Plan' ? 'Processing...' : 'Upgrade to Starter'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
@@ -99,13 +106,13 @@ export default function Pricing({ isSubmitting, submittingPlan }) {
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: 'white' }}>$89</span> <span style={{ color: '#94A3B8', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
-            disabled={isSubmitting}
+            disabled={isSubmitting || activePlan === 'Pro Plan'}
             onClick={() => handleUpgrade('Pro Plan')}
-            style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)', opacity: isSubmitting ? 0.7 : 1 }} 
-            onMouseEnter={(e) => { if(!isSubmitting) e.target.style.opacity = '0.9'; }} 
-            onMouseLeave={(e) => { if(!isSubmitting) e.target.style.opacity = '1'; }}
+            style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Pro Plan') ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)', opacity: (isSubmitting || activePlan === 'Pro Plan') ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.opacity = '0.9'; }} 
+            onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.opacity = '1'; }}
           >
-            {isSubmitting && submittingPlan === 'Pro Plan' ? 'Processing...' : 'Upgrade to Pro'}
+            {activePlan === 'Pro Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Pro Plan' ? 'Processing...' : 'Upgrade to Pro'}
           </button>
           
           <div style={{ borderTop: '1px solid #1E293B', paddingTop: '1.5rem', flex: 1 }}>
@@ -132,13 +139,13 @@ export default function Pricing({ isSubmitting, submittingPlan }) {
             <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$139</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
-            disabled={isSubmitting}
+            disabled={isSubmitting || activePlan === 'Enterprise Plan'}
             onClick={() => handleUpgrade('Enterprise Plan')}
-            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0F172A', border: '2px solid #E2E8F0', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: isSubmitting ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: isSubmitting ? 0.7 : 1 }} 
-            onMouseEnter={(e) => { if(!isSubmitting) { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; } }} 
-            onMouseLeave={(e) => { if(!isSubmitting) { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; } }}
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#0F172A', border: '2px solid #E2E8F0', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Enterprise Plan') ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: (isSubmitting || activePlan === 'Enterprise Plan') ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Enterprise Plan') { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; } }} 
+            onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Enterprise Plan') { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; } }}
           >
-            {isSubmitting && submittingPlan === 'Enterprise Plan' ? 'Processing...' : 'Upgrade to Enterprise'}
+            {activePlan === 'Enterprise Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Enterprise Plan' ? 'Processing...' : 'Upgrade to Enterprise'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>

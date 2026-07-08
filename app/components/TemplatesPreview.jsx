@@ -8,16 +8,30 @@ const PreviewLink = ({ onClick }) => (
   </div>
 );
 
-const LockedOverlay = ({ plan }) => (
+const LockedOverlay = ({ plan, activePlan }) => {
+  const planRanks = { 'Free': 0, 'Starter Plan': 1, 'Pro Plan': 2, 'Enterprise Plan': 3 };
+  const currentRank = planRanks[activePlan] || 0;
+  const requiredRank = planRanks[plan] || 0;
+  
+  if (currentRank >= requiredRank) return null;
+
+  return (
   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(2px)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderRadius: 'inherit', zIndex: 10 }}>
     <div style={{ backgroundColor: 'white', padding: '0.5rem 1rem', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '0.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', border: '1px solid #E2E8F0' }}>
       <span style={{ fontSize: '1.2rem' }}>🔒</span>
       <span style={{ fontWeight: 'bold', color: '#0F172A', fontSize: '0.8rem' }}>{plan} Required</span>
     </div>
-  </div>
-);
+    </div>
+  );
+};
 
-export default function TemplatesPreview({ onPublish, isPublishing, actionData }) {
+export default function TemplatesPreview({ onPublish, isPublishing, actionData, activePlan = 'Free' }) {
+  const planRanks = { 'Free': 0, 'Starter Plan': 1, 'Pro Plan': 2, 'Enterprise Plan': 3 };
+  const currentRank = planRanks[activePlan] || 0;
+  
+  const isLocked = (requiredPlan) => {
+    return currentRank < (planRanks[requiredPlan] || 0);
+  };
   const navigate = useNavigate();
   const [previewTemplate, setPreviewTemplate] = useState(null);
   
@@ -72,7 +86,7 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
           </div>
           
           <div style={{ position: 'relative', backgroundColor: '#7C2D12', color: 'white', padding: '0.75rem 1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundImage: 'linear-gradient(to right, #7C2D12, #B45309)' }}>
-            <LockedOverlay plan="Starter Plan" />
+            <LockedOverlay plan="Starter Plan" activePlan={activePlan} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '2rem' }}>🪔</span>
               <div>
@@ -81,14 +95,18 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              {isLocked('Starter Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Happy Diwali'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Happy Diwali')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={true} className="btn" style={{ backgroundColor: '#94A3B8', color: 'white', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'not-allowed', border: 'none' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Happy Diwali')} className="btn" style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : 'white', color: isLocked('Starter Plan') ? 'white' : '#7C2D12', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Starter Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#18181B', color: 'white', padding: '0.75rem 1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundImage: 'linear-gradient(to right, #18181B, #3F3F46)' }}>
-            <LockedOverlay plan="Starter Plan" />
+            <LockedOverlay plan="Starter Plan" activePlan={activePlan} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '2rem' }}>🖤</span>
               <div>
@@ -97,14 +115,18 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              {isLocked('Starter Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Black Friday Sale'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Black Friday Sale')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={true} className="btn" style={{ backgroundColor: '#94A3B8', color: 'white', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'not-allowed', border: 'none' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Black Friday Sale')} className="btn" style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : 'white', color: isLocked('Starter Plan') ? 'white' : '#18181B', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Starter Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#FCE7F3', color: '#BE185D', padding: '0.75rem 1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundImage: 'linear-gradient(to right, #FBCFE8, #F9A8D4)' }}>
-            <LockedOverlay plan="Pro Plan" />
+            <LockedOverlay plan="Pro Plan" activePlan={activePlan} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '2rem' }}>💖</span>
               <div>
@@ -113,14 +135,18 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(190,24,93,0.1)', color: '#BE185D', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              {isLocked('Pro Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(190,24,93,0.1)', color: '#BE185D', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Valentine'))} className="btn" style={{ backgroundColor: 'rgba(190,24,93,0.1)', color: '#BE185D', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Valentine')} className="btn" style={{ backgroundColor: 'rgba(190,24,93,0.1)', color: '#BE185D', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={true} className="btn" style={{ backgroundColor: '#94A3B8', color: 'white', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'not-allowed', border: 'none' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('Valentine')} className="btn" style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : 'white', color: isLocked('Pro Plan') ? 'white' : '#BE185D', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Pro Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#0284C7', color: 'white', padding: '0.75rem 1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundImage: 'linear-gradient(to right, #0284C7, #0369A1)' }}>
-            <LockedOverlay plan="Pro Plan" />
+            <LockedOverlay plan="Pro Plan" activePlan={activePlan} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '2rem' }}>💻</span>
               <div>
@@ -129,14 +155,18 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              {isLocked('Pro Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Cyber Monday Sale'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Cyber Monday')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={true} className="btn" style={{ backgroundColor: '#94A3B8', color: 'white', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'not-allowed', border: 'none' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('Cyber Monday')} className="btn" style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : 'white', color: isLocked('Pro Plan') ? 'white' : '#0284C7', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Pro Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#A21CAF', color: 'white', padding: '0.75rem 1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundImage: 'linear-gradient(to right, #A21CAF, #86198F)' }}>
-            <LockedOverlay plan="Enterprise Plan" />
+            <LockedOverlay plan="Enterprise Plan" activePlan={activePlan} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '2rem' }}>🦇</span>
               <div>
@@ -145,14 +175,18 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              {isLocked('Enterprise Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Halloween Spooktacular'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Halloween Spooktacular')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={true} className="btn" style={{ backgroundColor: '#94A3B8', color: 'white', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'not-allowed', border: 'none' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Halloween Spooktacular')} className="btn" style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : 'white', color: isLocked('Enterprise Plan') ? 'white' : '#A21CAF', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#10B981', color: 'white', padding: '0.75rem 1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', backgroundImage: 'linear-gradient(to right, #10B981, #059669)' }}>
-            <LockedOverlay plan="Enterprise Plan" />
+            <LockedOverlay plan="Enterprise Plan" activePlan={activePlan} />
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span style={{ fontSize: '2rem' }}>🌸</span>
               <div>
@@ -161,9 +195,13 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              {isLocked('Enterprise Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Spring Collection'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Spring Collection')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={true} className="btn" style={{ backgroundColor: '#94A3B8', color: 'white', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'not-allowed', border: 'none' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Spring Collection')} className="btn" style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : 'white', color: isLocked('Enterprise Plan') ? 'white' : '#10B981', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -191,88 +229,116 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData }
           </div>
           
           <div style={{ position: 'relative', backgroundColor: '#7F1D1D', borderRadius: '8px', padding: '1rem', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Starter Plan" />
+            <LockedOverlay plan="Starter Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '0.25rem', color: '#FEF08A' }}>Spin & Win!</p>
             <span style={{ fontSize: '2.5rem', margin: '0.5rem 0' }}>🎡</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Starter Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Spin & Win Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Spin & Win Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Spin & Win Popup')} style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Starter Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '1rem', color: '#1E293B', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Starter Plan" />
+            <LockedOverlay plan="Starter Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#DC2626' }}>Wait!</p>
             <p style={{ fontSize: '0.7rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>Get 15% OFF Before You Go</p>
             <span style={{ fontSize: '2rem', margin: '0.5rem 0' }}>🎁</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: '#E2E8F0', color: '#475569', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Starter Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: '#E2E8F0', color: '#475569', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Exit Intent Popup'))} style={{ backgroundColor: '#E2E8F0', color: '#475569', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Exit Intent Popup')} style={{ backgroundColor: '#E2E8F0', color: '#475569', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Exit Intent Popup')} style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Starter Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#1E3A8A', borderRadius: '8px', padding: '1rem', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Pro Plan" />
+            <LockedOverlay plan="Pro Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '0.25rem', color: '#FDE047' }}>New Year Sale</p>
             <p style={{ fontSize: '0.9rem', fontWeight: 'bold', margin: '0.25rem 0' }}>Flat 30% OFF</p>
             <span style={{ fontSize: '1.5rem', margin: '0.2rem 0' }}>🎆</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Pro Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('New Year Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('New Year Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('New Year Popup')} style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Pro Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#EA580C', borderRadius: '8px', padding: '1rem', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Pro Plan" />
+            <LockedOverlay plan="Pro Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>Flash Sale Popup</p>
             <span style={{ fontSize: '2rem', margin: '0.5rem 0' }}>⚡</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Pro Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Flash Sale Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Flash Sale Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('Flash Sale Popup')} style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Pro Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#0D9488', borderRadius: '8px', padding: '1rem', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Enterprise Plan" />
+            <LockedOverlay plan="Enterprise Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>Welcome Discount</p>
             <span style={{ fontSize: '2rem', margin: '0.5rem 0' }}>👋</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Enterprise Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Welcome Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Welcome Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Welcome Popup')} style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#6366F1', borderRadius: '8px', padding: '1rem', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Enterprise Plan" />
+            <LockedOverlay plan="Enterprise Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>Free Shipping</p>
             <span style={{ fontSize: '2rem', margin: '0.5rem 0' }}>🚚</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Enterprise Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Free Shipping Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Free Shipping Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Free Shipping Popup')} style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
           <div style={{ position: 'relative', backgroundColor: '#D946EF', borderRadius: '8px', padding: '1rem', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-            <LockedOverlay plan="Enterprise Plan" />
+            <LockedOverlay plan="Enterprise Plan" activePlan={activePlan} />
             <span style={{ position: 'absolute', top: '5px', right: '5px', fontSize: '0.7rem' }}>❌</span>
             <p style={{ fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>Newsletter Signup</p>
             <span style={{ fontSize: '2rem', margin: '0.5rem 0' }}>✉️</span>
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', marginTop: '0.5rem', position: 'relative', zIndex: 20 }}>
-              <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              {isLocked('Enterprise Plan') ? (
+                <button onClick={() => navigate('/app/pricing')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> 🔒 Edit</button>
+              ) : (
+                <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Newsletter Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
+              )}
               <button onClick={() => setPreviewTemplate('Newsletter Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={true} style={{ backgroundColor: '#94A3B8', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'not-allowed' }}>🔒 Publish</button>
+              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Newsletter Popup')} style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 

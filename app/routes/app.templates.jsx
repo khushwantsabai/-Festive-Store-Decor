@@ -1,5 +1,5 @@
 import React from 'react';
-import { useActionData, useSubmit, useNavigation } from 'react-router';
+import { useActionData, useSubmit, useNavigation, useLoaderData } from 'react-router';
 import { authenticate } from '../shopify.server';
 import TemplatesPreview from '../components/TemplatesPreview';
 
@@ -60,10 +60,30 @@ export async function action({ request }) {
   return { success: true, publishedTemplate: templateName };
 }
 
+export async function loader({ request }) {
+  const { billing } = await authenticate.admin(request);
+  try {
+    const billingCheck = await billing.check({
+      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+      isTest: true,
+    });
+    
+    let activePlan = 'Free';
+    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
+      activePlan = billingCheck.appSubscriptions[0].name;
+    }
+    return { activePlan };
+  } catch (error) {
+    return { activePlan: 'Free' };
+  }
+}
+
 export default function TemplatesRoute() {
   const submit = useSubmit();
   const actionData = useActionData();
   const navigation = useNavigation();
+  const loaderData = useLoaderData();
+  const activePlan = loaderData?.activePlan || 'Free';
 
   const handlePublish = (templateName) => {
     submit({ templateName }, { method: 'post' });
@@ -74,6 +94,7 @@ export default function TemplatesRoute() {
       onPublish={handlePublish} 
       isPublishing={navigation.state === 'submitting'}
       actionData={actionData}
+      activePlan={activePlan}
     />
   );
 }
