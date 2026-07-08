@@ -1,8 +1,8 @@
 import React from 'react';
-import { Sparkles, Palette, PlayCircle } from 'lucide-react';
+import { Sparkles, Palette, PlayCircle, Clock, Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
-export default function Dashboard() {
+export default function Dashboard({ drafts = [] }) {
   const navigate = useNavigate();
 
   return (
@@ -12,11 +12,11 @@ export default function Dashboard() {
       <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '120%', height: '120%', background: 'radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 60%)', zIndex: 0, pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: '20%', right: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1), transparent 60%)', zIndex: 0, pointerEvents: 'none', borderRadius: '50%', filter: 'blur(40px)' }} />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1 }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: '800', background: 'linear-gradient(90deg, var(--text-dark), #6C4CF1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1, flexWrap: 'wrap', gap: '1rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '800', background: 'linear-gradient(90deg, var(--text-dark), #6C4CF1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           Welcome back
         </h2>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <button onClick={() => navigate('/app/pricing')} style={{ 
             background: 'linear-gradient(135deg, #6C4CF1, #8B5CF6)', 
             color: 'white', 
@@ -31,7 +31,7 @@ export default function Dashboard() {
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 15px 30px -5px rgba(108, 76, 241, 0.5)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(108, 76, 241, 0.4)'; }}
           >
-            Upgrade Experience
+            Upgrade
           </button>
         </div>
       </div>
@@ -73,14 +73,14 @@ export default function Dashboard() {
           <Palette size={48} strokeWidth={1.5} />
         </div>
         
-        <h3 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--text-dark)', letterSpacing: '-0.02em' }}>
+        <h3 style={{ fontSize: 'clamp(1.75rem, 6vw, 2.5rem)', fontWeight: '800', marginBottom: '1rem', color: 'var(--text-dark)', letterSpacing: '-0.02em' }}>
           Craft Your Store's Magic
         </h3>
-        <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)', maxWidth: '600px', marginBottom: '2.5rem', lineHeight: '1.6' }}>
+        <p style={{ fontSize: 'clamp(1rem, 4vw, 1.125rem)', color: 'var(--text-muted)', maxWidth: '600px', marginBottom: '2.5rem', lineHeight: '1.6' }}>
           Unleash the full potential of your storefront with breathtaking festive designs, seamless animations, and immersive decorations that captivate every visitor.
         </p>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           <button 
             onClick={() => navigate('/app/templates')}
             style={{ 
@@ -106,6 +106,73 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
+
+      {/* Saved Drafts Section */}
+      {drafts && drafts.length > 0 && (
+        <div style={{ marginTop: '3rem' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-dark)' }}>
+            <Clock size={24} color="var(--primary)" />
+            Recent Drafts
+          </h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            {drafts.map(draft => (
+              <div key={draft.id} style={{
+                background: 'white',
+                borderRadius: '16px',
+                padding: '1.5rem',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                border: '1px solid #E2E8F0',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem'
+              }}>
+                <div>
+                  <h4 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'var(--text-dark)' }}>{draft.templateName}</h4>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                    Last edited: {new Date(draft.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div style={{ 
+                  background: draft.bgColor, 
+                  height: '80px', 
+                  borderRadius: '8px', 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  overflow: 'hidden',
+                  padding: '1rem'
+                }}>
+                  <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{draft.textContent}</span>
+                </div>
+                <button 
+                  onClick={() => navigate(`/app/editor?draftId=${draft.id}&template=${encodeURIComponent(draft.templateName)}`)}
+                  style={{
+                    background: '#F1F5F9',
+                    color: '#334155',
+                    padding: '0.75rem',
+                    borderRadius: '8px',
+                    border: 'none',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#E2E8F0'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#F1F5F9'}
+                >
+                  <Edit3 size={18} />
+                  Resume Editing
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes float {

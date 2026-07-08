@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Check, Star, Zap, Shield, Crown, X, AlertCircle } from 'lucide-react';
 import { useSubmit, useActionData } from 'react-router';
 
-export default function Pricing({ isSubmitting }) {
+export default function Pricing({ isSubmitting, submittingPlan }) {
   const submit = useSubmit();
   const actionData = useActionData();
 
@@ -10,13 +10,15 @@ export default function Pricing({ isSubmitting }) {
     submit({ plan }, { method: 'post' });
   };
 
+
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem 0' }}>
       {actionData?.billingError && (
         <div style={{ backgroundColor: '#FEE2E2', border: '1px solid #EF4444', color: '#B91C1C', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', margin: '0 auto', maxWidth: '600px' }}>
           <AlertCircle size={24} />
-          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.9rem' }}>
-            {JSON.stringify(actionData.billingError, null, 2)}
+          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.9rem', fontFamily: 'inherit' }}>
+            {actionData.billingError}
           </pre>
         </div>
       )}
@@ -69,7 +71,7 @@ export default function Pricing({ isSubmitting }) {
             onMouseEnter={(e) => { if(!isSubmitting) e.target.style.backgroundColor = '#F0F9FF'; }} 
             onMouseLeave={(e) => { if(!isSubmitting) e.target.style.backgroundColor = 'white'; }}
           >
-            {isSubmitting ? 'Processing...' : 'Upgrade to Starter'}
+            {isSubmitting && submittingPlan === 'Starter Plan' ? 'Processing...' : 'Upgrade to Starter'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
@@ -103,7 +105,7 @@ export default function Pricing({ isSubmitting }) {
             onMouseEnter={(e) => { if(!isSubmitting) e.target.style.opacity = '0.9'; }} 
             onMouseLeave={(e) => { if(!isSubmitting) e.target.style.opacity = '1'; }}
           >
-            {isSubmitting ? 'Processing...' : 'Upgrade to Pro'}
+            {isSubmitting && submittingPlan === 'Pro Plan' ? 'Processing...' : 'Upgrade to Pro'}
           </button>
           
           <div style={{ borderTop: '1px solid #1E293B', paddingTop: '1.5rem', flex: 1 }}>
@@ -136,7 +138,7 @@ export default function Pricing({ isSubmitting }) {
             onMouseEnter={(e) => { if(!isSubmitting) { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; } }} 
             onMouseLeave={(e) => { if(!isSubmitting) { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; } }}
           >
-            {isSubmitting ? 'Processing...' : 'Upgrade to Enterprise'}
+            {isSubmitting && submittingPlan === 'Enterprise Plan' ? 'Processing...' : 'Upgrade to Enterprise'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>

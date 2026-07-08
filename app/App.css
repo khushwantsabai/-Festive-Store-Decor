@@ -131,3 +131,20 @@
   font-size: 0.8rem;
   margin-top: 1rem;
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .showcase-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .bottom-panels-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+}

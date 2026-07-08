@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
-import { Monitor, Tablet, Smartphone, Undo2, Redo2, LayoutTemplate, Image as ImageIcon, Type, MousePointerClick, Clock, Sparkles, Code, SplitSquareHorizontal, MessageSquareWarning } from 'lucide-react';
+import { Monitor, Smartphone, Tablet, Undo2, Redo2, LayoutTemplate, Image as ImageIcon, Type, MousePointerClick, Clock, Sparkles, Code, SplitSquareHorizontal, MessageSquareWarning } from 'lucide-react';
 
-export default function Editor() {
+export default function Editor({ submit, actionData, isSubmitting, loaderData }) {
   const [searchParams] = useSearchParams();
   const templateName = searchParams.get('template') || 'Merry Christmas';
 
@@ -61,74 +61,204 @@ export default function Editor() {
     popupBg = '#D946EF'; popupTitle = 'Newsletter Signup'; popupIcon = '✉️';
   }
 
+  const draftData = loaderData?.draftData;
+
+  const defaultTextContent = draftData?.textContent ?? (isPopup ? popupSubtitle : subtitle);
+  const defaultButtonText = draftData?.buttonText ?? (isPopup ? (templateName.includes('Flash') ? 'Shop Now' : 'Subscribe') : 'Shop Now');
+  const defaultBgColor = draftData?.bgColor ?? (isPopup ? popupBg : heroBg);
+  const defaultBtnBgColor = draftData?.btnBgColor ?? (isPopup ? (defaultBgColor === '#F8FAFC' ? '#DC2626' : 'rgba(0,0,0,0.3)') : 'rgba(255,255,255,0.2)');
+  const defaultTextColor = draftData?.textColor ?? (isPopup ? 'inherit' : (templateName === 'Merry Christmas' ? '#A7F3D0' : templateName === 'Happy Diwali' ? '#FDE68A' : templateName === 'Black Friday Sale' ? '#A1A1AA' : templateName === 'Valentine' ? '#BE185D' : templateName === 'Cyber Monday' ? '#E0F2FE' : templateName === 'Halloween Spooktacular' ? '#FDF4FF' : templateName === 'Spring Collection' ? '#D1FAE5' : 'inherit'));
+  const defaultShowCloseButton = draftData?.showCloseButton ?? true;
+
+  const [textContent, setTextContent] = useState(defaultTextContent);
+  const [buttonText, setButtonText] = useState(defaultButtonText);
+  const [bgColor, setBgColor] = useState(defaultBgColor);
+  const [btnBgColor, setBtnBgColor] = useState(defaultBtnBgColor);
+  const [textColor, setTextColor] = useState(defaultTextColor);
+  const [showCloseButton, setShowCloseButton] = useState(defaultShowCloseButton);
+
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [currentTemplate, setCurrentTemplate] = useState(templateName);
+
+  if (templateName !== currentTemplate) {
+    setCurrentTemplate(templateName);
+    setTextContent(defaultTextContent);
+    setButtonText(defaultButtonText);
+    setBgColor(defaultBgColor);
+    setBtnBgColor(defaultBtnBgColor);
+    setTextColor(defaultTextColor);
+    setHistory([{ textContent: defaultTextContent, buttonText: defaultButtonText, bgColor: defaultBgColor, btnBgColor: defaultBtnBgColor, textColor: defaultTextColor, showCloseButton: true }]);
+    setHistoryIndex(0);
+  }
+
+  useEffect(() => {
+    if (history.length === 0) {
+      setHistory([{ textContent: defaultTextContent, buttonText: defaultButtonText, bgColor: defaultBgColor, btnBgColor: defaultBtnBgColor, textColor: defaultTextColor, showCloseButton: true }]);
+      setHistoryIndex(0);
+    }
+  }, []);
+
+  const updateState = (updates) => {
+    const newState = { textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, ...updates };
+    if (updates.textContent !== undefined) setTextContent(updates.textContent);
+    if (updates.buttonText !== undefined) setButtonText(updates.buttonText);
+    if (updates.bgColor !== undefined) setBgColor(updates.bgColor);
+    if (updates.btnBgColor !== undefined) setBtnBgColor(updates.btnBgColor);
+    if (updates.textColor !== undefined) setTextColor(updates.textColor);
+    if (updates.showCloseButton !== undefined) setShowCloseButton(updates.showCloseButton);
+
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(newState);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const prevState = history[historyIndex - 1];
+      setTextContent(prevState.textContent);
+      setButtonText(prevState.buttonText);
+      setBgColor(prevState.bgColor);
+      setBtnBgColor(prevState.btnBgColor);
+      setTextColor(prevState.textColor);
+      setShowCloseButton(prevState.showCloseButton);
+      setHistoryIndex(historyIndex - 1);
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      const nextState = history[historyIndex + 1];
+      setTextContent(nextState.textContent);
+      setButtonText(nextState.buttonText);
+      setBgColor(nextState.bgColor);
+      setBtnBgColor(nextState.btnBgColor);
+      setTextColor(nextState.textColor);
+      setShowCloseButton(nextState.showCloseButton);
+      setHistoryIndex(historyIndex + 1);
+    }
+  };
+
+  const [viewMode, setViewMode] = useState('desktop');
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase' }}>Drag & Drop Customize Editor {templateName !== 'Merry Christmas' ? `- ${templateName}` : ''}</h2>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase' }}>Customize Editor {templateName !== 'Merry Christmas' ? `- ${templateName}` : ''}</h2>
+      
+      {actionData?.success && (
+        <div style={{ backgroundColor: '#D1FAE5', border: '1px solid #34D399', color: '#065F46', padding: '1rem', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div><strong>Success!</strong> {actionData.message}</div>
+        </div>
+      )}
+      
+      {actionData?.error && (
+        <div style={{ backgroundColor: '#FEE2E2', border: '1px solid #F87171', color: '#991B1B', padding: '1rem', borderRadius: '8px' }}>
+          <strong>Error:</strong> {actionData.error}
+        </div>
+      )}
       
       <div className="card" style={{ padding: '0', display: 'flex', overflow: 'hidden', height: 'auto', minHeight: '600px', flexWrap: 'wrap' }}>
         
         {/* Center Canvas Panel */}
         <div style={{ flex: '1 1 60%', minWidth: '300px', backgroundColor: '#F1F5F9', display: 'flex', flexDirection: 'column' }}>
           {/* Top Toolbar */}
-          <div style={{ padding: '0.75rem 1.5rem', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ padding: '0.75rem 1.5rem', backgroundColor: 'white', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
             <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)' }}>
-              <Monitor size={18} color="var(--primary)" /> <Tablet size={18} /> <Smartphone size={18} />
+              <Monitor size={18} color={viewMode === 'desktop' ? 'var(--primary)' : 'inherit'} style={{ cursor: 'pointer' }} onClick={() => setViewMode('desktop')} title="Desktop View" /> 
+              <Smartphone size={18} color={viewMode === 'mobile' ? 'var(--primary)' : 'inherit'} style={{ cursor: 'pointer' }} onClick={() => setViewMode('mobile')} title="Mobile Browser View" />
+              <Tablet size={18} color={viewMode === 'app' ? 'var(--primary)' : 'inherit'} style={{ cursor: 'pointer' }} onClick={() => setViewMode('app')} title="Mobile App View" />
             </div>
             <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)' }}>
-              <Undo2 size={18} /> <Redo2 size={18} />
+              <Undo2 size={18} onClick={handleUndo} style={{ cursor: historyIndex > 0 ? 'pointer' : 'default', opacity: historyIndex > 0 ? 1 : 0.5 }} /> 
+              <Redo2 size={18} onClick={handleRedo} style={{ cursor: historyIndex < history.length - 1 ? 'pointer' : 'default', opacity: historyIndex < history.length - 1 ? 1 : 0.5 }} />
             </div>
             <div style={{ display: 'flex', gap: '1rem' }}>
-              <button className="btn btn-outline" style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }}>Preview</button>
-              <button className="btn btn-primary" style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }}>Save & Continue</button>
+              <button 
+                disabled={isSubmitting}
+                onClick={() => submit({ templateName, actionType: 'draft', textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, draftId: draftData?.id || '' }, { method: 'post' })}
+                className="btn btn-outline" 
+                style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }}
+              >
+                Save Draft
+              </button>
+              <button 
+                disabled={isSubmitting}
+                onClick={() => submit({ templateName, actionType: 'publish', textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, draftId: draftData?.id || '' }, { method: 'post' })}
+                className="btn btn-primary" 
+                style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }}
+              >
+                {isSubmitting ? 'Processing...' : 'Publish'}
+              </button>
             </div>
           </div>
           
           {/* Canvas Area */}
-          <div style={{ padding: '2rem', flex: 1, overflowY: 'auto', position: 'relative' }}>
-            <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', overflow: 'hidden', minHeight: '400px', filter: isPopup ? 'blur(2px)' : 'none' }}>
-              <div style={{ backgroundColor: '#1E293B', color: 'white', padding: '0.5rem', textAlign: 'center', fontSize: '0.875rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem' }}>
-                Store Announcement Bar <button style={{ backgroundColor: 'white', color: '#1E293B', padding: '0.1rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>Shop Now</button>
-              </div>
-              <div style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h4 style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Your Store</h4>
-                <ul style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                  <li>Home</li><li>Shop</li><li>Collection</li><li>About</li><li>Contact</li>
-                </ul>
-              </div>
+          <div style={{ padding: '2rem', flex: 1, overflowY: 'auto', position: 'relative', display: 'flex', justifyContent: 'center', backgroundColor: '#F1F5F9' }}>
+            <div style={{ 
+              width: '100%', 
+              maxWidth: (viewMode === 'mobile' || viewMode === 'app') ? '375px' : '100%', 
+              transition: 'all 0.3s ease', 
+              backgroundColor: 'white', 
+              borderRadius: (viewMode === 'mobile' || viewMode === 'app') ? '32px' : '8px', 
+              border: (viewMode === 'mobile' || viewMode === 'app') ? '12px solid #1E293B' : 'none',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', 
+              overflow: 'hidden', 
+              minHeight: '400px', 
+              filter: isPopup ? 'blur(2px)' : 'none' 
+            }}>
+              {/* Dummy store headers removed as requested */}
               
               {!isPopup && (
-                <>
-                  <div style={{ backgroundColor: heroBg, height: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: titleColor, position: 'relative' }}>
-                     <h2 style={{ fontSize: '2.5rem', fontWeight: '300' }}>{title}</h2>
-                     <h1 style={{ fontSize: '3rem', fontWeight: 'bold', marginBottom: '1rem' }}>{subtitle.includes('OFF') ? subtitle.split(' - ')[0] : 'UP TO 50% OFF'}</h1>
-                     <p style={{ fontSize: '1.25rem', marginBottom: '1.5rem', color: titleColor === 'white' ? 'rgba(255,255,255,0.8)' : 'inherit' }}>{subtitle.includes('OFF') ? 'Limited Time Offer' : subtitle}</p>
-                     <button className="btn" style={{ backgroundColor: buttonBg, color: buttonColor, fontSize: '1.125rem' }}>Shop Now</button>
+                <div style={{ padding: '2rem', backgroundColor: '#F8FAFC', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  <div style={{ 
+                    backgroundColor: bgColor, 
+                    color: titleColor, 
+                    padding: 'clamp(1rem, 5vw, 2rem)', 
+                    borderRadius: '12px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    flexWrap: 'wrap',
+                    flexDirection: viewMode === 'desktop' ? 'row' : 'column',
+                    textAlign: viewMode === 'desktop' ? 'left' : 'center',
+                    gap: viewMode === 'desktop' ? '2rem' : '1rem', 
+                    width: '100%', 
+                    backgroundImage: bgColor === heroBg ? `linear-gradient(to right, ${heroBg}, ${heroBg === '#064E3B' ? '#047857' : heroBg === '#7C2D12' ? '#B45309' : heroBg === '#18181B' ? '#3F3F46' : heroBg === '#FCE7F3' ? '#F9A8D4' : heroBg === '#0284C7' ? '#0369A1' : heroBg === '#A21CAF' ? '#86198F' : '#059669'})` : 'none' 
+                  }}>
+                    <span style={{ fontSize: '4rem', lineHeight: 1 }}>
+                      {templateName === 'Merry Christmas' ? '🎅' : 
+                       templateName === 'Happy Diwali' ? '🪔' : 
+                       templateName === 'Black Friday Sale' ? '🖤' : 
+                       templateName === 'Valentine' ? '💖' : 
+                       templateName === 'Cyber Monday' ? '💻' : 
+                       templateName === 'Halloween Spooktacular' ? '🦇' : 
+                       templateName === 'Spring Collection' ? '🌸' : '✨'}
+                    </span>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: viewMode === 'desktop' ? 'flex-start' : 'center', gap: '0.5rem' }}>
+                      <h2 style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 'bold', margin: 0, color: titleColor }}>{title}</h2>
+                      <p style={{ fontSize: 'clamp(1rem, 4vw, 1.2rem)', color: textColor, margin: 0, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{textContent}</p>
+                      <button style={{ backgroundColor: btnBgColor, color: titleColor, border: `1px solid ${titleColor}`, padding: '0.4rem 1rem', borderRadius: '4px', fontWeight: 'bold', marginTop: '0.5rem', cursor: 'pointer', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{buttonText}</button>
+                    </div>
                   </div>
-                  
-                  <div style={{ backgroundColor: '#1E293B', color: 'white', padding: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem' }}>
-                    <div><span style={{ fontSize: '2rem', fontWeight: 'bold' }}>05</span><br/><span style={{ fontSize: '0.75rem' }}>Days</span></div> :
-                    <div><span style={{ fontSize: '2rem', fontWeight: 'bold' }}>12</span><br/><span style={{ fontSize: '0.75rem' }}>Hours</span></div> :
-                    <div><span style={{ fontSize: '2rem', fontWeight: 'bold' }}>45</span><br/><span style={{ fontSize: '0.75rem' }}>Minutes</span></div> :
-                    <div><span style={{ fontSize: '2rem', fontWeight: 'bold' }}>30</span><br/><span style={{ fontSize: '0.75rem' }}>Seconds</span></div>
-                  </div>
-                </>
+                </div>
               )}
             </div>
 
             {/* Popup Overlay Render */}
             {isPopup && (
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10 }}>
-                <div style={{ width: '350px', backgroundColor: popupBg, color: popupColor, padding: '2rem', borderRadius: '12px', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)', border: popupBg === '#F8FAFC' ? '1px solid #E2E8F0' : 'none', position: 'relative' }}>
-                  <span style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>❌</span>
-                  <h3 style={{ fontSize: '1.5rem', margin: '0 0 1rem 0', color: popupBg === '#F8FAFC' ? '#DC2626' : 'inherit' }}>{popupTitle}</h3>
+                <div style={{ width: '350px', backgroundColor: bgColor, color: popupColor, padding: '2rem', borderRadius: '12px', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)', border: bgColor === '#F8FAFC' ? '1px solid #E2E8F0' : 'none', position: 'relative' }}>
+                  {showCloseButton && <span style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>❌</span>}
+                  <h3 style={{ fontSize: '1.5rem', margin: '0 0 1rem 0', color: bgColor === '#F8FAFC' ? '#DC2626' : 'inherit' }}>{popupTitle}</h3>
                   <span style={{ fontSize: '4rem' }}>{popupIcon}</span>
-                  <p style={{ margin: '1rem 0' }}>{popupSubtitle}</p>
+                  <p style={{ margin: '1rem 0', color: textColor, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{textContent}</p>
                   <div style={{ marginTop: '1rem' }}>
                     {(!templateName.includes('Flash') && !templateName.includes('Free Shipping')) && (
                       <input type="email" placeholder="Enter email" style={{ width: '100%', padding: '0.75rem', marginBottom: '0.75rem', borderRadius: '6px', border: '1px solid #ccc' }} />
                     )}
-                    <button style={{ width: '100%', padding: '0.75rem', backgroundColor: popupBg === '#F8FAFC' ? '#DC2626' : 'rgba(0,0,0,0.3)', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer' }}>
-                      {templateName.includes('Flash') ? 'Shop Now' : templateName.includes('Free Shipping') ? 'Claim Offer' : 'Subscribe'}
+                    <button style={{ width: '100%', padding: '0.75rem', backgroundColor: btnBgColor, color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                      {buttonText}
                     </button>
                   </div>
                 </div>
@@ -148,25 +278,69 @@ export default function Editor() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.875rem' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Text Content</label>
-                <textarea style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', resize: 'vertical' }} rows="3" value={isPopup ? popupSubtitle : subtitle} readOnly />
+                <textarea 
+                  onChange={(e) => updateState({ textContent: e.target.value })}
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', resize: 'vertical' }} 
+                  rows="3" 
+                  value={textContent} 
+                />
               </div>
               <div>
                 <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Button Text</label>
-                <input type="text" style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0' }} defaultValue={isPopup ? (templateName.includes('Flash') ? 'Shop Now' : 'Subscribe') : 'Shop Now'} />
+                <input 
+                  onChange={(e) => updateState({ buttonText: e.target.value })}
+                  type="text" 
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0' }} 
+                  value={buttonText} 
+                />
               </div>
               
               <div>
                 <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Background Color</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', border: '1px solid #E2E8F0', borderRadius: '6px' }}>
-                  <div style={{ width: '20px', height: '20px', backgroundColor: isPopup ? popupBg : heroBg, borderRadius: '4px', border: '1px solid #E2E8F0' }}></div>
-                  <span>{isPopup ? popupBg : heroBg}</span>
+                  <input 
+                    type="color" 
+                    onChange={(e) => updateState({ bgColor: e.target.value })}
+                    style={{ width: '24px', height: '24px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: 'transparent' }} 
+                    value={bgColor} 
+                  />
+                  <span>{bgColor.toUpperCase()}</span>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Button Color</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', border: '1px solid #E2E8F0', borderRadius: '6px' }}>
+                  <input 
+                    type="color" 
+                    onChange={(e) => updateState({ btnBgColor: e.target.value })}
+                    style={{ width: '24px', height: '24px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: 'transparent' }} 
+                    value={btnBgColor.startsWith('rgba') ? '#ffffff' : btnBgColor} 
+                  />
+                  <span>{btnBgColor.startsWith('rgba') ? 'DEFAULT' : btnBgColor.toUpperCase()}</span>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Text Color</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', border: '1px solid #E2E8F0', borderRadius: '6px' }}>
+                  <input 
+                    type="color" 
+                    onChange={(e) => updateState({ textColor: e.target.value })}
+                    style={{ width: '24px', height: '24px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: 'transparent' }} 
+                    value={textColor === 'inherit' ? '#000000' : textColor} 
+                  />
+                  <span>{textColor === 'inherit' ? 'DEFAULT' : textColor.toUpperCase()}</span>
                 </div>
               </div>
               
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Show Close Button</span>
-                <div style={{ width: '36px', height: '20px', backgroundColor: 'var(--success)', borderRadius: '999px', position: 'relative' }}>
-                  <div style={{ width: '16px', height: '16px', backgroundColor: 'white', borderRadius: '50%', position: 'absolute', right: '2px', top: '2px' }}></div>
+                <div 
+                  onClick={() => updateState({ showCloseButton: !showCloseButton })}
+                  style={{ width: '36px', height: '20px', backgroundColor: showCloseButton ? 'var(--success)' : '#CBD5E1', borderRadius: '999px', position: 'relative', cursor: 'pointer', transition: 'all 0.2s' }}
+                >
+                  <div style={{ width: '16px', height: '16px', backgroundColor: 'white', borderRadius: '50%', position: 'absolute', right: showCloseButton ? '2px' : 'auto', left: showCloseButton ? 'auto' : '2px', top: '2px', transition: 'all 0.2s' }}></div>
                 </div>
               </div>
               

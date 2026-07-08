@@ -10,25 +10,14 @@ export const action = async ({ request }) => {
   
   if (!plan) return null;
 
-  try {
-    // Require the chosen plan. If they don't have it, it will redirect them to the approval screen.
-    // We use isTest: true for development.
-    await billing.require({
-      plans: [plan],
+  await billing.require({
+    plans: [plan],
+    isTest: true,
+    onFailure: async () => billing.request({
+      plan: plan,
       isTest: true,
-      onFailure: async () => billing.request({
-        plan: plan,
-        isTest: true,
-        returnUrl: request.url,
-      }),
-    });
-  } catch (error) {
-    if (error.errorData || (error instanceof Error && error.name === 'BillingError')) {
-      return { billingError: error.errorData || error.message };
-    }
-    // Re-throw if it's a redirect Response from Shopify
-    throw error;
-  }
+    }),
+  });
   
   return null;
 };
@@ -55,6 +44,8 @@ export default function PricingRoute() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting" || navigation.state === "loading";
   
-  return <Pricing isSubmitting={isSubmitting} />;
+  const submittingPlan = navigation.formData?.get("plan");
+  
+  return <Pricing isSubmitting={isSubmitting} submittingPlan={submittingPlan} />;
 }
 

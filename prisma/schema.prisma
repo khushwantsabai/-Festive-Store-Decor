@@ -32,3 +32,16 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+model TemplateDraft {
+  id              String   @id @default(uuid())
+  shop            String
+  templateName    String
+  textContent     String
+  buttonText      String
+  bgColor         String
+  btnBgColor      String   @default("rgba(255,255,255,0.2)")
+  textColor       String   @default("inherit")
+  showCloseButton Boolean  @default(true)
+  updatedAt       DateTime @updatedAt
+}
