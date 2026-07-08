@@ -22,9 +22,13 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
           </pre>
         </div>
       )}
-      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A', marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>Simple, transparent pricing</h2>
-        <p style={{ color: '#64748B', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>Choose the perfect plan for your store. Upgrade or downgrade at any time to match your business needs.</p>
+      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <h2 style={{ fontSize: '3rem', fontWeight: '800', color: '#0F172A', marginBottom: '1rem', letterSpacing: '-0.03em', lineHeight: '1.2' }}>
+          Simple, <span style={{ background: 'linear-gradient(135deg, #0EA5E9 0%, #8B5CF6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>transparent</span> pricing
+        </h2>
+        <p style={{ color: '#64748B', fontSize: '1.15rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
+          Choose the perfect plan for your store. Upgrade or downgrade at any time to match your seasonal business needs.
+        </p>
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', alignItems: 'stretch' }}>
@@ -91,29 +95,28 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
         </div>
 
         {/* Pro Plan */}
-        <div style={{ backgroundColor: '#0F172A', border: '1px solid #1E293B', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)', position: 'relative', transform: 'scale(1.05)', zIndex: 10 }}>
-          <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', color: 'white', padding: '6px 16px', borderRadius: '999px', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em', textTransform: 'uppercase', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>Most Popular</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#A78BFA' }}>
+        <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)', transition: 'all 0.3s ease', cursor: 'default' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#8B5CF6' }}>
             <Shield size={20} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: 0, color: 'white' }}>Pro</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: 0, color: '#0F172A' }}>Pro</h3>
           </div>
-          <p style={{ color: '#94A3B8', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Advanced features for high-volume merchants.</p>
+          <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Advanced features for high-volume merchants.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
-            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: 'white' }}>$89</span> <span style={{ color: '#94A3B8', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
+            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$89</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
             disabled={isSubmitting || activePlan === 'Pro Plan'}
             onClick={() => handleUpgrade('Pro Plan')}
-            style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Pro Plan') ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s', boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.4)', opacity: (isSubmitting || activePlan === 'Pro Plan') ? 0.7 : 1 }} 
-            onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.opacity = '0.9'; }} 
-            onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.opacity = '1'; }}
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#8B5CF6', border: '2px solid #8B5CF6', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Pro Plan') ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: (isSubmitting || activePlan === 'Pro Plan') ? 0.7 : 1 }} 
+            onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.backgroundColor = '#F5F3FF'; }} 
+            onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.backgroundColor = 'white'; }}
           >
             {activePlan === 'Pro Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Pro Plan' ? 'Processing...' : 'Upgrade to Pro'}
           </button>
           
-          <div style={{ borderTop: '1px solid #1E293B', paddingTop: '1.5rem', flex: 1 }}>
-            <p style={{ fontSize: '0.85rem', fontWeight: '700', color: 'white', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Starter, plus:</p>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: '#E2E8F0', listStyle: 'none', padding: 0, margin: 0 }}>
+          <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
+            <p style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Everything in Starter, plus:</p>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: '#475569', listStyle: 'none', padding: 0, margin: 0 }}>
               <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> 4 Banner Templates</li>
               <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> 5 Popup Templates</li>
               <li style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}><Check size={18} color="#A78BFA" style={{ flexShrink: 0, marginTop: '2px' }} /> Priority Email Support</li>
