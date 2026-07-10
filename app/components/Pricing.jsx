@@ -24,7 +24,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
       )}
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h2 style={{ fontSize: '3rem', fontWeight: '800', color: '#0F172A', marginBottom: '1rem', letterSpacing: '-0.03em', lineHeight: '1.2' }}>
-          Simple, <span style={{ background: 'linear-gradient(135deg, #0EA5E9 0%, #8B5CF6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>transparent</span> pricing
+          Simple, <span style={{ background: 'linear-gradient(135deg, #0EA5E9 0%, #B91C1C 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>transparent</span> pricing
         </h2>
         <p style={{ color: '#64748B', fontSize: '1.15rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
           Choose the perfect plan for your store. Upgrade or downgrade at any time to match your seasonal business needs.
@@ -96,7 +96,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
 
         {/* Pro Plan */}
         <div style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)', transition: 'all 0.3s ease', cursor: 'default' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)'; }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#8B5CF6' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#B91C1C' }}>
             <Shield size={20} />
             <h3 style={{ fontSize: '1.1rem', fontWeight: '700', margin: 0, color: '#0F172A' }}>Pro</h3>
           </div>
@@ -107,7 +107,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
           <button 
             disabled={isSubmitting || activePlan === 'Pro Plan'}
             onClick={() => handleUpgrade('Pro Plan')}
-            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#8B5CF6', border: '2px solid #8B5CF6', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Pro Plan') ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: (isSubmitting || activePlan === 'Pro Plan') ? 0.7 : 1 }} 
+            style={{ width: '100%', padding: '0.75rem', backgroundColor: 'white', color: '#B91C1C', border: '2px solid #B91C1C', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Pro Plan') ? 'not-allowed' : 'pointer', transition: 'all 0.2s', opacity: (isSubmitting || activePlan === 'Pro Plan') ? 0.7 : 1 }} 
             onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.backgroundColor = '#F5F3FF'; }} 
             onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.backgroundColor = 'white'; }}
           >

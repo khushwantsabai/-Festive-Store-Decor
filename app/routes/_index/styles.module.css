@@ -33,7 +33,7 @@
 .ambientOrb1 {
   width: 500px;
   height: 500px;
-  background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+  background: linear-gradient(135deg, #B91C1C, #D97706);
   top: -100px;
   right: -100px;
   animation: float 20s ease-in-out infinite alternate;
@@ -42,7 +42,7 @@
 .ambientOrb2 {
   width: 600px;
   height: 600px;
-  background: linear-gradient(135deg, #10B981, #0EA5E9);
+  background: linear-gradient(135deg, #064E3B, #10B981);
   bottom: -200px;
   left: -200px;
   animation: float 25s ease-in-out infinite alternate-reverse;
@@ -84,7 +84,7 @@
 }
 
 .logoIcon {
-  color: #8B5CF6;
+  color: #B91C1C;
 }
 
 .navLinks {
@@ -141,7 +141,7 @@
   align-items: center;
   gap: 0.5rem;
   background: rgba(155, 28, 28, 0.15);
-  color: #A78BFA;
+  color: #F87171;
   padding: 0.5rem 1rem;
   border-radius: 99px;
   font-size: 0.875rem;
@@ -164,7 +164,7 @@
 }
 
 .gradientText {
-  background: linear-gradient(135deg, #A78BFA, #38BDF8);
+  background: linear-gradient(135deg, #F87171, #FBBF24);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -214,7 +214,7 @@
 }
 
 .button {
-  background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+  background: linear-gradient(135deg, #DC2626, #991B1B);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -300,7 +300,7 @@
   left: 10%;
   right: 10%;
   bottom: 10%;
-  background: linear-gradient(135deg, #8B5CF6, #38BDF8);
+  background: linear-gradient(135deg, #B91C1C, #D97706);
   filter: blur(60px);
   opacity: 0.4;
   border-radius: 24px;
@@ -373,9 +373,9 @@
 }
 
 .mockItemActive {
-  color: #8B5CF6;
+  color: #D97706;
   background: rgba(155, 28, 28, 0.1);
-  border-left: 2px solid #8B5CF6;
+  border-left: 2px solid #D97706;
 }
 
 .mockContent {
@@ -608,7 +608,7 @@
   width: 64px;
   height: 64px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #A78BFA, #38BDF8);
+  background: linear-gradient(135deg, #DC2626, #FBBF24);
   color: white;
   display: flex;
   align-items: center;

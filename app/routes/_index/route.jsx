@@ -209,7 +209,7 @@ export default function App() {
                     <div className={styles.colorSwatch} style={{background: '#10B981'}}></div>
                     <div className={styles.colorSwatch} style={{background: '#F59E0B'}}></div>
                     <div className={styles.colorSwatch} style={{background: '#EF4444'}}></div>
-                    <div className={styles.colorSwatch} style={{background: '#8B5CF6'}}></div>
+                    <div className={styles.colorSwatch} style={{background: '#B91C1C'}}></div>
                   </div>
                 </div>
               </div>
