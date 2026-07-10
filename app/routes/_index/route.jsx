@@ -42,8 +42,7 @@ export default function App() {
       <nav className={styles.nav}>
         <div className={styles.navContainer}>
           <div className={styles.logo}>
-            <Sparkles size={20} className={styles.logoIcon} />
-            Festive Store Decor
+            <img src="/logo.jpg" alt="Festive Store Decor" style={{ height: '32px' }} />
           </div>
           <div className={styles.navLinks}>
             <a href="#features">Features</a>
@@ -252,8 +251,7 @@ export default function App() {
       <footer className={styles.footer}>
         <div className={styles.footerContainer}>
           <div className={styles.footerBrand}>
-            <Sparkles size={20} className={styles.logoIcon} />
-            <span style={{ fontWeight: 700, color: 'white' }}>Festive Store Decor</span>
+            <img src="/logo.jpg" alt="Festive Store Decor" style={{ height: '24px' }} />
           </div>
           <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
         </div>

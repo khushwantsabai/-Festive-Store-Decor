@@ -1,8 +1,9 @@
 export default function Header() {
   return (
     <div style={{ padding: '1rem', backgroundColor: 'transparent' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: 'black', marginBottom: '0.5rem' }}>
-        Festive Store Decor <span style={{ fontSize: '0.875rem', backgroundColor: 'rgba(108, 76, 241, 0.1)', color: 'var(--primary)', padding: '0.25rem 0.75rem', borderRadius: '999px', verticalAlign: 'middle', marginLeft: '1rem' }}>Shopify App</span>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: 'black', marginBottom: '0.5rem', display: 'flex', alignItems: 'center' }}>
+        <img src="/logo.jpg" alt="Festive Store Decor" style={{ height: '3rem', marginRight: '1rem' }} />
+        <span style={{ fontSize: '0.875rem', backgroundColor: 'rgba(108, 76, 241, 0.1)', color: 'var(--primary)', padding: '0.25rem 0.75rem', borderRadius: '999px', verticalAlign: 'middle' }}>Shopify App</span>
       </h1>
       <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
         Holiday Banner, Popup, Snow Animation & Festival Themes.

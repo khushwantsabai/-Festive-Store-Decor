@@ -81,7 +81,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
             <div style={{ display: 'flex', gap: '0.5rem', position: 'relative', zIndex: 20 }}>
               <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Merry Christmas'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               <button onClick={() => setPreviewTemplate('Merry Christmas')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing} onClick={() => handlePublishClick('Merry Christmas')} className="btn" style={{ backgroundColor: 'white', color: '#064E3B', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: 'pointer' }}>{isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
           
@@ -101,7 +100,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Happy Diwali'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Happy Diwali')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Happy Diwali')} className="btn" style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : 'white', color: isLocked('Starter Plan') ? 'white' : '#7C2D12', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Starter Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -121,7 +119,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Black Friday Sale'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Black Friday Sale')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Black Friday Sale')} className="btn" style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : 'white', color: isLocked('Starter Plan') ? 'white' : '#18181B', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Starter Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -141,7 +138,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Valentine'))} className="btn" style={{ backgroundColor: 'rgba(190,24,93,0.1)', color: '#BE185D', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Valentine')} className="btn" style={{ backgroundColor: 'rgba(190,24,93,0.1)', color: '#BE185D', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('Valentine')} className="btn" style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : 'white', color: isLocked('Pro Plan') ? 'white' : '#BE185D', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Pro Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -161,7 +157,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Cyber Monday Sale'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Cyber Monday')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('Cyber Monday')} className="btn" style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : 'white', color: isLocked('Pro Plan') ? 'white' : '#0284C7', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Pro Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -181,7 +176,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Halloween Spooktacular'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Halloween Spooktacular')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Halloween Spooktacular')} className="btn" style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : 'white', color: isLocked('Enterprise Plan') ? 'white' : '#A21CAF', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -201,7 +195,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Spring Collection'))} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Edit size={14}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Spring Collection')} className="btn" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Eye size={14}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Spring Collection')} className="btn" style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : 'white', color: isLocked('Enterprise Plan') ? 'white' : '#10B981', fontSize: '0.8rem', padding: '0.4rem 1rem', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer', border: 'none' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : isPublishing ? '...' : 'Publish'}</button>
             </div>
           </div>
 
@@ -224,7 +217,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
             <div style={{ display: 'flex', gap: '0.5rem', width: '100%', position: 'relative', zIndex: 20 }}>
               <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Christmas Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               <button onClick={() => setPreviewTemplate('Christmas Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing} onClick={() => handlePublishClick('Christmas Popup')} style={{ backgroundColor: '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Publish</button>
             </div>
           </div>
           
@@ -240,7 +232,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Spin & Win Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Spin & Win Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Spin & Win Popup')} style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Starter Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -257,7 +248,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Exit Intent Popup'))} style={{ backgroundColor: '#E2E8F0', color: '#475569', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Exit Intent Popup')} style={{ backgroundColor: '#E2E8F0', color: '#475569', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Starter Plan')} onClick={() => handlePublishClick('Exit Intent Popup')} style={{ backgroundColor: isLocked('Starter Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Starter Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Starter Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -274,7 +264,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('New Year Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('New Year Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('New Year Popup')} style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Pro Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -290,7 +279,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Flash Sale Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Flash Sale Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Pro Plan')} onClick={() => handlePublishClick('Flash Sale Popup')} style={{ backgroundColor: isLocked('Pro Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Pro Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Pro Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -306,7 +294,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Welcome Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Welcome Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Welcome Popup')} style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -322,7 +309,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Free Shipping Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Free Shipping Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Free Shipping Popup')} style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -338,7 +324,6 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                 <button onClick={() => navigate('/app/editor?template=' + encodeURIComponent('Newsletter Popup'))} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Edit size={12}/> Edit</button>
               )}
               <button onClick={() => setPreviewTemplate('Newsletter Popup')} style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', border: 'none', cursor: 'pointer' }}><Eye size={12}/> Preview</button>
-              <button disabled={isPublishing || isLocked('Enterprise Plan')} onClick={() => handlePublishClick('Newsletter Popup')} style={{ backgroundColor: isLocked('Enterprise Plan') ? '#94A3B8' : '#DC2626', color: 'white', padding: '0.3rem', flex: 1, borderRadius: '4px', fontSize: '0.6rem', fontWeight: 'bold', border: 'none', cursor: isLocked('Enterprise Plan') ? 'not-allowed' : 'pointer' }}>{isLocked('Enterprise Plan') ? '🔒 Publish' : 'Publish'}</button>
             </div>
           </div>
 
@@ -466,25 +451,7 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
                   return 'Enterprise Plan';
                 };
                 const requiredPlan = getRequiredPlan(previewTemplate);
-                return (
-                  <button 
-                    disabled={!!requiredPlan || isPublishing}
-                    onClick={() => { setPreviewTemplate(null); handlePublishClick(previewTemplate); }}
-                    style={{ 
-                      backgroundColor: requiredPlan ? '#94A3B8' : 'var(--primary)', 
-                      color: 'white', 
-                      padding: '0.75rem 2.5rem', 
-                      borderRadius: '8px', 
-                      fontSize: '1.1rem', 
-                      fontWeight: 'bold', 
-                      border: 'none', 
-                      cursor: requiredPlan ? 'not-allowed' : 'pointer', 
-                      display: 'inline-block' 
-                    }}
-                  >
-                    {isPublishing ? '...' : requiredPlan ? `🔒 Publish (${requiredPlan} Required)` : 'Publish Template'}
-                  </button>
-                );
+                return null;
               })()}
             </div>
           </div>
