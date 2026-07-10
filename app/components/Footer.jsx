@@ -16,7 +16,7 @@ export default function Footer() {
             { icon: '🎧', label: '24/7 Support' }
           ].map(feature => (
             <div key={feature.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: 'var(--text-dark)' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'rgba(108, 76, 241, 0.1)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.5rem', color: 'var(--primary)' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'rgba(155, 28, 28, 0.1)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.5rem', color: 'var(--primary)' }}>
                 {feature.icon}
               </div>
               <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>{feature.label}</span>
@@ -40,7 +40,7 @@ export default function Footer() {
           </ul>
         </div>
         
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', backgroundColor: 'rgba(108, 76, 241, 0.1)', borderRadius: '16px' }}>
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', backgroundColor: 'rgba(155, 28, 28, 0.1)', borderRadius: '16px' }}>
           <span style={{ fontSize: '2rem', color: 'var(--primary)' }}>🛡️</span>
         </div>
       </div>

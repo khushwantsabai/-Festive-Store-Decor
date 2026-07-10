@@ -1,8 +1,8 @@
 :root {
-  --primary: #6C4CF1;
-  --secondary: #8B5CF6;
+  --primary: #9B1C1C; /* Festive Red */
+  --secondary: #064E3B; /* Festive Green */
   --success: #10B981;
-  --warning: #F59E0B;
+  --warning: #D97706; /* Festive Gold */
   --danger: #EF4444;
   --background: #F8F9FC;
   --cards: #FFFFFF;
@@ -119,12 +119,12 @@ button {
 }
 
 .nav-link:hover {
-  background-color: rgba(108, 76, 241, 0.05);
+  background-color: rgba(155, 28, 28, 0.05);
   color: var(--primary);
 }
 
 .nav-link.active {
-  background-color: rgba(108, 76, 241, 0.1);
+  background-color: rgba(155, 28, 28, 0.1);
   color: var(--primary);
   font-weight: 600;
 }

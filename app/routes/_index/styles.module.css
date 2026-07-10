@@ -140,14 +140,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(155, 28, 28, 0.15);
   color: #A78BFA;
   padding: 0.5rem 1rem;
   border-radius: 99px;
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 2rem;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(155, 28, 28, 0.3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   animation: slideUp 0.6s ease-out;
@@ -226,12 +226,12 @@
   align-items: center;
   gap: 0.5rem;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39);
+  box-shadow: 0 4px 14px 0 rgba(155, 28, 28, 0.39);
 }
 
 .button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 6px 20px rgba(155, 28, 28, 0.5);
 }
 
 .trustSignals {
@@ -374,7 +374,7 @@
 
 .mockItemActive {
   color: #8B5CF6;
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(155, 28, 28, 0.1);
   border-left: 2px solid #8B5CF6;
 }
 
@@ -616,7 +616,7 @@
   font-size: 1.75rem;
   font-weight: 800;
   margin: 0 auto 1.5rem;
-  box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(155, 28, 28, 0.4);
 }
 
 .stepTitle {

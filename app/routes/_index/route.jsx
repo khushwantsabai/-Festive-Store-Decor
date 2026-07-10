@@ -32,7 +32,7 @@ export default function App() {
       <div 
         className={styles.ambientBackground}
         style={{
-          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(139, 92, 246, 0.15) 0%, rgba(15, 23, 42, 0) 50%)`
+          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(155, 28, 28, 0.15) 0%, rgba(15, 23, 42, 0) 50%)`
         }}
       />
       <div className={styles.ambientOrb1} />
@@ -151,7 +151,7 @@ export default function App() {
             <div className={`${styles.bentoCard} ${styles.cardLarge}`}>
               <div className={styles.cardGlow}></div>
               <div className={styles.cardContent}>
-                <div className={styles.iconWrapper} style={{ color: '#A78BFA', background: 'rgba(139, 92, 246, 0.1)' }}>
+                <div className={styles.iconWrapper} style={{ color: '#F87171', background: 'rgba(155, 28, 28, 0.1)' }}>
                   <LayoutTemplate size={28} />
                 </div>
                 <h3 className={styles.cardTitle}>Festive Banners</h3>

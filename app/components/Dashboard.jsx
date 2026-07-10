@@ -9,27 +9,27 @@ export default function Dashboard({ drafts = [] }) {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem', height: '100%', position: 'relative' }}>
       
       {/* Background ambient glow */}
-      <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '120%', height: '120%', background: 'radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 60%)', zIndex: 0, pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', top: '20%', right: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1), transparent 60%)', zIndex: 0, pointerEvents: 'none', borderRadius: '50%', filter: 'blur(40px)' }} />
+      <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '120%', height: '120%', background: 'radial-gradient(circle at 50% 50%, rgba(155, 28, 28, 0.15), transparent 60%)', zIndex: 0, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '20%', right: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.1), transparent 60%)', zIndex: 0, pointerEvents: 'none', borderRadius: '50%', filter: 'blur(40px)' }} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1, flexWrap: 'wrap', gap: '1rem' }}>
-        <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '800', background: 'linear-gradient(90deg, var(--text-dark), #6C4CF1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Welcome back
+        <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '800', background: 'linear-gradient(90deg, var(--text-dark), var(--primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <img src="/logo.jpg" alt="Logo" style={{ height: '40px', borderRadius: '50%' }} /> Welcome back
         </h2>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <button onClick={() => navigate('/app/pricing')} style={{ 
-            background: 'linear-gradient(135deg, #6C4CF1, #8B5CF6)', 
+            background: 'linear-gradient(135deg, var(--primary), var(--secondary))', 
             color: 'white', 
             padding: '0.75rem 1.5rem', 
             borderRadius: '999px', 
             border: 'none', 
             fontWeight: '600', 
             cursor: 'pointer',
-            boxShadow: '0 10px 25px -5px rgba(108, 76, 241, 0.4)',
+            boxShadow: '0 10px 25px -5px rgba(155, 28, 28, 0.4)',
             transition: 'transform 0.2s, box-shadow 0.2s'
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 15px 30px -5px rgba(108, 76, 241, 0.5)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(108, 76, 241, 0.4)'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 15px 30px -5px rgba(155, 28, 28, 0.5)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(155, 28, 28, 0.4)'; }}
           >
             Upgrade
           </button>
@@ -57,18 +57,18 @@ export default function Dashboard({ drafts = [] }) {
         
         {/* Subtle animated floating elements */}
         <div style={{ position: 'absolute', top: '10%', left: '10%', animation: 'float 6s ease-in-out infinite' }}>
-          <Sparkles size={32} color="rgba(108, 76, 241, 0.3)" />
+          <Sparkles size={32} color="rgba(155, 28, 28, 0.3)" />
         </div>
         <div style={{ position: 'absolute', bottom: '15%', right: '15%', animation: 'float 8s ease-in-out infinite reverse' }}>
-          <Sparkles size={48} color="rgba(139, 92, 246, 0.2)" />
+          <Sparkles size={48} color="rgba(155, 28, 28, 0.2)" />
         </div>
 
         <div style={{ 
-          background: 'linear-gradient(135deg, rgba(108, 76, 241, 0.1), rgba(139, 92, 246, 0.1))',
+          background: 'linear-gradient(135deg, rgba(155, 28, 28, 0.1), rgba(155, 28, 28, 0.15))',
           padding: '1.25rem',
           borderRadius: '50%',
           marginBottom: '1.5rem',
-          color: '#6C4CF1'
+          color: 'var(--primary)'
         }}>
           <Palette size={48} strokeWidth={1.5} />
         </div>
