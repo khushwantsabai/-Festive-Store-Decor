@@ -2,7 +2,7 @@
 
 client_id = "80b6aa3397092de35054368f85808873"
 name = "Festive Store Decor"
-application_url = "https://festive-store-decor.vercel.app"
+application_url = "https://festivestoredecor.sabaiinnovations.com"
 embedded = true
 
 [access_scopes]
@@ -21,7 +21,7 @@ api_version = "2026-07"
   topics = [ "app/scopes_update" ]
 
 [auth]
-redirect_urls = [ "https://festive-store-decor.vercel.app/api/auth" ]
+redirect_urls = [ "https://festivestoredecor.sabaiinnovations.com/api/auth" ]
 
 [build]
 automatically_update_urls_on_dev = true
