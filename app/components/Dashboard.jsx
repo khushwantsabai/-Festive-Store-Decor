@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sparkles, Palette, PlayCircle, Clock, Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 export default function Dashboard({ drafts = [] }) {
   const navigate = useNavigate();
+  const [showOnboarding, setShowOnboarding] = useState(true);
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem', height: '100%', position: 'relative' }}>
@@ -35,6 +36,78 @@ export default function Dashboard({ drafts = [] }) {
           </button>
         </div>
       </div>
+
+      {/* Onboarding Banner for Theme Extension */}
+      {showOnboarding && (
+        <div style={{
+          background: 'linear-gradient(to right, #FFFBEB, #FEF3C7)',
+          border: '1px solid #FCD34D',
+          borderRadius: '16px',
+          padding: '1.5rem',
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '1rem',
+          zIndex: 1,
+          boxShadow: '0 4px 6px -1px rgba(217, 119, 6, 0.1)',
+          position: 'relative'
+        }}>
+          <button 
+            onClick={() => setShowOnboarding(false)}
+            style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#B45309',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.25rem'
+            }}
+            aria-label="Dismiss"
+          >
+            ✕
+          </button>
+          <div style={{ color: '#D97706', marginTop: '4px' }}>
+            <Sparkles size={24} />
+          </div>
+          <div style={{ flex: 1, paddingRight: '2rem' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#92400E', margin: '0 0 0.5rem 0' }}>Almost there! Enable the app in your theme.</h3>
+            <p style={{ color: '#B45309', margin: '0 0 1rem 0', lineHeight: '1.5' }}>
+              To see your festive banners and magical snow effects on your storefront, you must enable the <b>Festive Store Decor App Embed</b> block in your Shopify Theme Editor.
+            </p>
+            <button 
+              onClick={() => {
+                const shop = new URLSearchParams(window.location.search).get('shop') || window.shopify?.config?.shop;
+                if (shop) {
+                  window.open(`https://${shop}/admin/themes/current/editor?context=apps`, '_blank');
+                } else {
+                  alert('Could not determine shop URL. Please go to Online Store > Themes > Customize > App Embeds manually.');
+                }
+              }}
+              style={{
+                background: '#D97706',
+                color: 'white',
+                border: 'none',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#B45309'}
+              onMouseLeave={(e) => e.currentTarget.style.background = '#D97706'}
+            >
+              Open Theme Editor
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Premium Hero Section */}
       <div style={{ 
