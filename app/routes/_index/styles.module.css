@@ -234,48 +234,7 @@
   box-shadow: 0 6px 20px rgba(155, 28, 28, 0.5);
 }
 
-.trustSignals {
-  margin-top: 3rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  animation: slideUp 1.4s ease-out;
-}
 
-.avatars {
-  display: flex;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid #030712;
-  margin-left: -12px;
-  background-color: #334155;
-  background-size: cover;
-}
-
-.avatar:first-child {
-  margin-left: 0;
-}
-
-.trustText {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  color: #94A3B8;
-}
-
-.stars {
-  display: flex;
-  gap: 2px;
-}
-
-.trustText strong {
-  color: white;
-}
 
 /* Mockup */
 .heroVisual {

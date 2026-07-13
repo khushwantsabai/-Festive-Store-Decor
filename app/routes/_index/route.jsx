@@ -82,24 +82,7 @@ export default function App() {
               </div>
             )}
             
-            <div className={styles.trustSignals}>
-              <div className={styles.avatars}>
-                <div className={styles.avatar} style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=1)'}}></div>
-                <div className={styles.avatar} style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=2)'}}></div>
-                <div className={styles.avatar} style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=3)'}}></div>
-                <div className={styles.avatar} style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=4)'}}></div>
-              </div>
-              <div className={styles.trustText}>
-                <div className={styles.stars}>
-                  <Star size={14} fill="#F59E0B" color="#F59E0B" />
-                  <Star size={14} fill="#F59E0B" color="#F59E0B" />
-                  <Star size={14} fill="#F59E0B" color="#F59E0B" />
-                  <Star size={14} fill="#F59E0B" color="#F59E0B" />
-                  <Star size={14} fill="#F59E0B" color="#F59E0B" />
-                </div>
-                <span>Loved by <strong>5,000+</strong> merchants</span>
-              </div>
-            </div>
+
           </div>
           
           <div className={styles.heroVisual}>
