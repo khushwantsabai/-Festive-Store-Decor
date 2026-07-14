@@ -1,5 +1,9 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse, useRouteError } from "react-router";
 
+export const links = () => [
+  { rel: "icon", href: "/logo.jpg", type: "image/jpeg" },
+];
+
 export default function App() {
   return (
     <html lang="en">
