@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Sparkles, Palette, PlayCircle, Clock, Edit3 } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { Sparkles, Palette, PlayCircle, Clock, Edit3, Trash2 } from 'lucide-react';
+import { useNavigate, useSubmit, Link } from 'react-router';
 
 export default function Dashboard({ drafts = [] }) {
   const navigate = useNavigate();
+  const submit = useSubmit();
   const [showOnboarding, setShowOnboarding] = useState(true);
 
   return (
@@ -219,28 +220,60 @@ export default function Dashboard({ drafts = [] }) {
                 }}>
                   <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{draft.textContent}</span>
                 </div>
-                <button 
-                  onClick={() => navigate(`/app/editor?draftId=${draft.id}&template=${encodeURIComponent(draft.templateName)}`)}
-                  style={{
-                    background: '#F1F5F9',
-                    color: '#334155',
-                    padding: '0.75rem',
-                    borderRadius: '8px',
-                    border: 'none',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#E2E8F0'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#F1F5F9'}
-                >
-                  <Edit3 size={18} />
-                  Resume Editing
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <Link 
+                    to={`/app/editor?draftId=${draft.id}&template=${encodeURIComponent(draft.templateName)}`}
+                    style={{
+                      flex: 1,
+                      background: '#F1F5F9',
+                      color: '#334155',
+                      padding: '0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      transition: 'background 0.2s',
+                      textDecoration: 'none'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = '#E2E8F0'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = '#F1F5F9'}
+                  >
+                    <Edit3 size={18} />
+                    Resume Editing
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this template?')) {
+                        const formData = new FormData();
+                        formData.append('intent', 'delete');
+                        formData.append('draftId', draft.id);
+                        submit(formData, { method: 'post' });
+                      }
+                    }}
+                    style={{
+                      background: '#FEE2E2',
+                      color: '#DC2626',
+                      padding: '0.75rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = '#FECACA'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = '#FEE2E2'}
+                    title="Delete"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

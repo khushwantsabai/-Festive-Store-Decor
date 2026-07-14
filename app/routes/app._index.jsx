@@ -13,6 +13,21 @@ export async function loader({ request }) {
   return { drafts };
 }
 
+export async function action({ request }) {
+  const { session } = await authenticate.admin(request);
+  const formData = await request.formData();
+  const intent = formData.get('intent');
+  const draftId = formData.get('draftId');
+
+  if (intent === 'delete' && draftId) {
+    await prisma.templateDraft.delete({
+      where: { id: draftId }
+    });
+    return { success: true, deletedId: draftId };
+  }
+  return { success: false };
+}
+
 export default function Index() {
   const { drafts } = useLoaderData();
   return <Dashboard drafts={drafts} />;
