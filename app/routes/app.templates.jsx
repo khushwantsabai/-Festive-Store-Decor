@@ -41,9 +41,9 @@ export async function action({ request }) {
         metafieldsSetInput: [
           {
             namespace: "festive",
-            key: "active_template",
-            type: "single_line_text_field",
-            value: templateName,
+            key: "template_config",
+            type: "json",
+            value: JSON.stringify({ templateName }),
             ownerId: appInstallationId
           }
         ]

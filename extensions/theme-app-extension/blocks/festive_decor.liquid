@@ -1,4 +1,5 @@
-{% assign active_template = app.metafields.festive.active_template.value %}
+{% assign config = app.metafields.festive.template_config.value %}
+{% assign active_template = config.templateName %}
 
 {% if active_template == blank %}
   {% if request.design_mode %}
@@ -8,122 +9,79 @@
     </div>
   {% endif %}
 {% else %}
-  
+
+  {% assign textContent = config.textContent %}
+  {% assign buttonText = config.buttonText %}
+  {% assign bgColor = config.bgColor %}
+  {% assign btnBgColor = config.btnBgColor %}
+  {% assign textColor = config.textColor | default: 'inherit' %}
+  {% assign showCloseButton = config.showCloseButton %}
+
   {% if active_template contains 'Popup' %}
-    <div style="position: fixed; bottom: 20px; right: 20px; padding: 20px; border-radius: 12px; z-index: 99999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); width: 300px; text-align: center; color: white; display: flex; flex-direction: column; align-items: center; 
-    {% case active_template %}
-      {% when 'Christmas Popup' %} background-color: #064E3B;
-      {% when 'Spin & Win Popup' %} background-color: #7F1D1D;
-      {% when 'Exit Intent Popup' %} background-color: #F8FAFC; color: #1E293B; border: 1px solid #E2E8F0;
-      {% when 'New Year Popup' %} background-color: #1E3A8A;
-      {% when 'Flash Sale Popup' %} background-color: #EA580C;
-      {% when 'Welcome Popup' %} background-color: #0D9488;
-      {% when 'Free Shipping Popup' %} background-color: #6366F1;
-      {% when 'Newsletter Popup' %} background-color: #D946EF;
-      {% else %} background-color: #064E3B;
-    {% endcase %}
+    <div style="position: fixed; bottom: 20px; right: 20px; padding: 20px; border-radius: 12px; z-index: 99999; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); width: 300px; text-align: center; color: {{ textColor }}; display: flex; flex-direction: column; align-items: center; 
+    {% if bgColor != blank %}
+      background-color: {{ bgColor }};
+    {% else %}
+      background-color: #064E3B;
+    {% endif %}
     ">
       
+      {% if showCloseButton != false %}
       <span style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 16px;" onclick="this.parentElement.style.display='none'">❌</span>
+      {% endif %}
+      
+      <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">
+        {% if textContent != blank %}{{ textContent }}{% else %}{{ active_template }}{% endif %}
+      </h3>
       
       {% case active_template %}
-        {% when 'Christmas Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">Christmas Special Offer</h3>
-          <div style="font-size: 40px; margin: 10px 0;">🎅</div>
-        {% when 'Spin & Win Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold; color: #FEF08A;">Spin & Win!</h3>
-          <div style="font-size: 40px; margin: 10px 0;">🎡</div>
-        {% when 'Exit Intent Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold; color: #DC2626;">Wait!</h3>
-          <p style="margin: 0 0 5px 0; font-size: 14px; font-weight: bold;">Get 15% OFF Before You Go</p>
-          <div style="font-size: 40px; margin: 10px 0;">🎁</div>
-        {% when 'New Year Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold; color: #FDE047;">New Year Sale</h3>
-          <p style="margin: 0 0 5px 0; font-size: 16px; font-weight: bold;">Flat 30% OFF</p>
-          <div style="font-size: 40px; margin: 10px 0;">🎆</div>
-        {% when 'Flash Sale Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">Flash Sale Popup</h3>
-          <div style="font-size: 40px; margin: 10px 0;">⚡</div>
-        {% when 'Welcome Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">Welcome Discount</h3>
-          <div style="font-size: 40px; margin: 10px 0;">👋</div>
-        {% when 'Free Shipping Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">Free Shipping</h3>
-          <div style="font-size: 40px; margin: 10px 0;">🚚</div>
-        {% when 'Newsletter Popup' %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">Newsletter Signup</h3>
-          <div style="font-size: 40px; margin: 10px 0;">✉️</div>
-        {% else %}
-          <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">Special Offer</h3>
+        {% when 'Christmas Popup' %}<div style="font-size: 40px; margin: 10px 0;">🎅</div>
+        {% when 'Spin & Win Popup' %}<div style="font-size: 40px; margin: 10px 0;">🎡</div>
+        {% when 'Exit Intent Popup' %}<div style="font-size: 40px; margin: 10px 0;">🎁</div>
+        {% when 'New Year Popup' %}<div style="font-size: 40px; margin: 10px 0;">🎆</div>
+        {% when 'Flash Sale Popup' %}<div style="font-size: 40px; margin: 10px 0;">⚡</div>
+        {% when 'Welcome Popup' %}<div style="font-size: 40px; margin: 10px 0;">👋</div>
+        {% when 'Free Shipping Popup' %}<div style="font-size: 40px; margin: 10px 0;">🚚</div>
+        {% when 'Newsletter Popup' %}<div style="font-size: 40px; margin: 10px 0;">✉️</div>
       {% endcase %}
       
       <input type="email" placeholder="Enter your email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;" />
-      <button style="width: 100%; background: #000; color: #fff; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold;">Subscribe</button>
+      <button style="width: 100%; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; color: inherit;
+      {% if btnBgColor != blank %}background-color: {{ btnBgColor }};{% else %}background: rgba(255,255,255,0.2);{% endif %}
+      ">{% if buttonText != blank %}{{ buttonText }}{% else %}Subscribe{% endif %}</button>
     </div>
   {% else %}
-    <div style="padding: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; color: white; border-radius: 8px; text-align: left;
-    {% case active_template %}
-      {% when 'Merry Christmas' %} background: linear-gradient(to right, #064E3B, #047857);
-      {% when 'Happy Diwali' %} background: linear-gradient(to right, #7C2D12, #B45309);
-      {% when 'Black Friday Sale' %} background: linear-gradient(to right, #18181B, #3F3F46);
-      {% when 'Valentine' %} background: linear-gradient(to right, #FBCFE8, #F9A8D4); color: #BE185D;
-      {% when 'Cyber Monday' %} background: linear-gradient(to right, #0284C7, #0369A1);
-      {% when 'Halloween Spooktacular' %} background: linear-gradient(to right, #A21CAF, #86198F);
-      {% when 'Spring Collection' %} background: linear-gradient(to right, #10B981, #059669);
-      {% else %} background: linear-gradient(to right, #064E3B, #047857);
-    {% endcase %}
+    <div style="padding: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; color: {{ textColor }}; border-radius: 8px; text-align: left;
+    {% if bgColor != blank %}
+      background-color: {{ bgColor }};
+    {% else %}
+      background: linear-gradient(to right, #064E3B, #047857);
+    {% endif %}
     ">
       
       {% case active_template %}
-        {% when 'Merry Christmas' %}
-          <div style="font-size: 40px;">🎅</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: white;">Merry Christmas</h2>
-            <p style="margin: 5px 0 0 0; color: #A7F3D0;">Up to 70% Off – Limited Time</p>
-          </div>
-        {% when 'Happy Diwali' %}
-          <div style="font-size: 40px;">🪔</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: #FCD34D;">Happy Diwali</h2>
-            <p style="margin: 5px 0 0 0; color: #FDE68A;">Extra 20% Off On All Orders</p>
-          </div>
-        {% when 'Black Friday Sale' %}
-          <div style="font-size: 40px;">🖤</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: white;">Black Friday Sale</h2>
-            <p style="margin: 5px 0 0 0; color: #A1A1AA;">Up to 80% OFF - Shop Now!</p>
-          </div>
-        {% when 'Valentine' %}
-          <div style="font-size: 40px;">💖</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: #BE185D;">Valentine's Day</h2>
-            <p style="margin: 5px 0 0 0; color: #BE185D;">Buy 2 Get 1 Free - Limited Time</p>
-          </div>
-        {% when 'Cyber Monday' %}
-          <div style="font-size: 40px;">💻</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: white;">Cyber Monday Sale</h2>
-            <p style="margin: 5px 0 0 0; color: #E0F2FE;">The Biggest Tech Deals of the Year</p>
-          </div>
-        {% when 'Halloween Spooktacular' %}
-          <div style="font-size: 40px;">🦇</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: white;">Halloween Spooktacular</h2>
-            <p style="margin: 5px 0 0 0; color: #FDF4FF;">Scary Good Discounts Inside</p>
-          </div>
-        {% when 'Spring Collection' %}
-          <div style="font-size: 40px;">🌸</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: white;">Spring Collection</h2>
-            <p style="margin: 5px 0 0 0; color: #D1FAE5;">Refresh Your Wardrobe Today</p>
-          </div>
-        {% else %}
-          <div style="font-size: 40px;">🎉</div>
-          <div>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold; color: white;">{{ active_template }}</h2>
-            <p style="margin: 5px 0 0 0; color: #A7F3D0;">Special Offer Inside!</p>
-          </div>
+        {% when 'Merry Christmas' %}<div style="font-size: 40px;">🎅</div>
+        {% when 'Happy Diwali' %}<div style="font-size: 40px;">🪔</div>
+        {% when 'Black Friday Sale' %}<div style="font-size: 40px;">🖤</div>
+        {% when 'Valentine' %}<div style="font-size: 40px;">💖</div>
+        {% when 'Cyber Monday' %}<div style="font-size: 40px;">💻</div>
+        {% when 'Halloween Spooktacular' %}<div style="font-size: 40px;">🦇</div>
+        {% when 'Spring Collection' %}<div style="font-size: 40px;">🌸</div>
+        {% else %}<div style="font-size: 40px;">🎉</div>
       {% endcase %}
+
+      <div>
+        <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">
+          {% if textContent != blank %}{{ textContent }}{% else %}{{ active_template }}{% endif %}
+        </h2>
+        {% if buttonText != blank %}
+        <button style="margin-top: 10px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: inherit;
+        {% if btnBgColor != blank %}background-color: {{ btnBgColor }};{% else %}background: rgba(255,255,255,0.2);{% endif %}
+        ">
+          {{ buttonText }}
+        </button>
+        {% endif %}
+      </div>
     </div>
   {% endif %}
 
