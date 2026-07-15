@@ -61,21 +61,11 @@ export async function action({ request }) {
 }
 
 export async function loader({ request }) {
-  const { billing } = await authenticate.admin(request);
-  try {
-    const billingCheck = await billing.check({
-      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: true,
-    });
-    
-    let activePlan = 'Free';
-    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
-      activePlan = billingCheck.appSubscriptions[0].name;
-    }
-    return { activePlan };
-  } catch (error) {
-    return { activePlan: 'Free' };
-  }
+  await authenticate.admin(request);
+  const cookieHeader = request.headers.get("Cookie") || "";
+  const match = cookieHeader.match(/mock_plan=([^;]+)/);
+  const activePlan = match ? decodeURIComponent(match[1]) : 'Enterprise Plan';
+  return { activePlan };
 }
 
 export default function TemplatesRoute() {

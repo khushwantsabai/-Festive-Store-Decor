@@ -3,51 +3,23 @@ import { authenticate } from "../shopify.server";
 import Pricing from '../components/Pricing';
 
 export const action = async ({ request }) => {
-  const { billing } = await authenticate.admin(request);
+  await authenticate.admin(request);
   const formData = await request.formData();
   const plan = formData.get("plan");
   
   if (!plan) return null;
-
-  if (plan === 'Free') {
-    const billingCheck = await billing.check({
-      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: true,
-    });
-    if (billingCheck.hasActivePayment) {
-      for (const sub of billingCheck.appSubscriptions) {
-        await billing.cancel({ subscriptionId: sub.id, isTest: true, prorate: true });
-      }
-    }
-    return { success: true };
-  }
-
-  await billing.request({
-    plan: plan,
-    isTest: true,
-  });
   
-  return null;
+  const headers = new Headers();
+  headers.append("Set-Cookie", "mock_plan=" + encodeURIComponent(plan) + "; Path=/; Max-Age=604800");
+  return Response.json({ success: true }, { headers });
 };
 
 export const loader = async ({ request }) => {
-  const { billing } = await authenticate.admin(request);
-  
-  try {
-    const billingCheck = await billing.check({
-      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: true,
-    });
-    
-    let activePlan = 'Free';
-    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
-      activePlan = billingCheck.appSubscriptions[0].name;
-    }
-    
-    return { hasActivePayment: billingCheck.hasActivePayment, activePlan };
-  } catch (error) {
-    return { hasActivePayment: false, activePlan: 'Free' };
-  }
+  await authenticate.admin(request);
+  const cookieHeader = request.headers.get("Cookie") || "";
+  const match = cookieHeader.match(/mock_plan=([^;]+)/);
+  const activePlan = match ? decodeURIComponent(match[1]) : 'Enterprise Plan';
+  return Response.json({ hasActivePayment: activePlan !== 'Free', activePlan });
 };
 
 import { useActionData, useNavigation, useLoaderData } from "react-router";
