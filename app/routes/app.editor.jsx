@@ -7,14 +7,23 @@ import prisma from '../db.server';
 import { redirect } from 'react-router';
 
 export async function loader({ request }) {
-  const { session } = await authenticate.admin(request);
+  const { session, billing } = await authenticate.admin(request);
   const url = new URL(request.url);
   const draftId = url.searchParams.get('draftId');
   const templateParam = url.searchParams.get('template');
 
-  const cookieHeader = request.headers.get("Cookie") || "";
-  const match = cookieHeader.match(/mock_plan=([^;]+)/);
-  let activePlan = match ? decodeURIComponent(match[1]) : 'Enterprise Plan';
+  let activePlan = 'Free';
+  try {
+    const billingCheck = await billing.check({
+      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+      isTest: true,
+    });
+    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
+      activePlan = billingCheck.appSubscriptions[0].name;
+    }
+  } catch (error) {
+    activePlan = 'Free';
+  }
 
   // Enforce access control for editor
   if (templateParam) {
