@@ -1,24 +1,27 @@
-import React, { useEffect } from 'react';
-import { Check, Star, Zap, Shield, Crown, X, AlertCircle } from 'lucide-react';
-import { useSubmit, useActionData } from 'react-router';
+import React, { useState, useEffect } from 'react';
+import { Check, Star, Zap, Shield, Crown, X, AlertCircle, Loader2 } from 'lucide-react';
+import { useSubmit, useNavigation, useActionData } from 'react-router';
 
-export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Free' }) {
+export default function Pricing({ activePlan = 'Free' }) {
   const submit = useSubmit();
+  const navigation = useNavigation();
   const actionData = useActionData();
 
+  const isSubmitting = navigation.state === "submitting" || navigation.state === "loading";
+  const submittingPlan = navigation.formData?.get("plan");
+  const errorMsg = actionData?.billingError;
+
   const handleUpgrade = (plan) => {
-    submit({ plan }, { method: 'post' });
+    submit({ plan }, { method: "post", action: "/app/pricing" });
   };
-
-
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem 0' }}>
-      {actionData?.billingError && (
+      {errorMsg && (
         <div style={{ backgroundColor: '#FEE2E2', border: '1px solid #EF4444', color: '#B91C1C', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', margin: '0 auto', maxWidth: '600px' }}>
-          <AlertCircle size={24} />
+          <AlertCircle size={24} style={{ flexShrink: 0 }} />
           <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.9rem', fontFamily: 'inherit' }}>
-            {actionData.billingError}
+            {errorMsg}
           </pre>
         </div>
       )}
@@ -49,7 +52,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             style={{ width: '100%', padding: '0.75rem', backgroundColor: '#F1F5F9', color: '#0F172A', border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '1rem', marginBottom: '2rem', cursor: (isSubmitting || activePlan === 'Free') ? 'not-allowed' : 'pointer', transition: 'background-color 0.2s', opacity: (isSubmitting || activePlan === 'Free') ? 0.7 : 1 }} 
             onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Free') e.target.style.backgroundColor = '#E2E8F0'; }} 
             onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Free') e.target.style.backgroundColor = '#F1F5F9'; }}>
-            {activePlan === 'Free' ? 'Current Plan' : isSubmitting && submittingPlan === 'Free' ? 'Processing...' : 'Downgrade to Free'}
+            {activePlan === 'Free' ? 'Current Plan' : isSubmitting && submittingPlan === 'Free' ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}><Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</span> : 'Downgrade to Free'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
@@ -80,7 +83,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Starter Plan') e.target.style.backgroundColor = '#F0F9FF'; }} 
             onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Starter Plan') e.target.style.backgroundColor = 'white'; }}
           >
-            {activePlan === 'Starter Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Starter Plan' ? 'Processing...' : 'Upgrade to Starter'}
+            {activePlan === 'Starter Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Starter Plan' ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}><Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</span> : 'Upgrade to Starter'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
@@ -111,7 +114,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.backgroundColor = '#F5F3FF'; }} 
             onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Pro Plan') e.target.style.backgroundColor = 'white'; }}
           >
-            {activePlan === 'Pro Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Pro Plan' ? 'Processing...' : 'Upgrade to Pro'}
+            {activePlan === 'Pro Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Pro Plan' ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}><Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</span> : 'Upgrade to Pro'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>
@@ -142,7 +145,7 @@ export default function Pricing({ isSubmitting, submittingPlan, activePlan = 'Fr
             onMouseEnter={(e) => { if(!isSubmitting && activePlan !== 'Enterprise Plan') { e.target.style.backgroundColor = '#F8FAFC'; e.target.style.borderColor = '#CBD5E1'; } }} 
             onMouseLeave={(e) => { if(!isSubmitting && activePlan !== 'Enterprise Plan') { e.target.style.backgroundColor = 'white'; e.target.style.borderColor = '#E2E8F0'; } }}
           >
-            {activePlan === 'Enterprise Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Enterprise Plan' ? 'Processing...' : 'Upgrade to Enterprise'}
+            {activePlan === 'Enterprise Plan' ? 'Current Plan' : isSubmitting && submittingPlan === 'Enterprise Plan' ? <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}><Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} /> Processing...</span> : 'Upgrade to Enterprise'}
           </button>
           
           <div style={{ borderTop: '1px solid #E2E8F0', paddingTop: '1.5rem', flex: 1 }}>

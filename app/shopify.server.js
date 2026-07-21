@@ -9,10 +9,6 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
 
-export const MONTHLY_PLAN = 'Starter Plan';
-export const PRO_PLAN = 'Pro Plan';
-export const ENTERPRISE_PLAN = 'Enterprise Plan';
-
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
@@ -26,7 +22,7 @@ const shopify = shopifyApp({
     expiringOfflineAccessTokens: true,
   },
   billing: {
-    [MONTHLY_PLAN]: {
+    'Starter Plan': {
       replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
       lineItems: [{
         amount: 49,
@@ -34,7 +30,7 @@ const shopify = shopifyApp({
         interval: BillingInterval.Every30Days,
       }],
     },
-    [PRO_PLAN]: {
+    'Pro Plan': {
       replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
       lineItems: [{
         amount: 89,
@@ -42,7 +38,7 @@ const shopify = shopifyApp({
         interval: BillingInterval.Every30Days,
       }],
     },
-    [ENTERPRISE_PLAN]: {
+    'Enterprise Plan': {
       replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
       lineItems: [{
         amount: 139,

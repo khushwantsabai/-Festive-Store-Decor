@@ -1,9 +1,13 @@
 import React from 'react';
+import { useLoaderData, useRouteError } from "react-router";
+import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import Pricing from '../components/Pricing';
 
 export const action = async ({ request }) => {
-  const { billing } = await authenticate.admin(request);
+  const authResult = await authenticate.admin(request);
+  const { billing, session } = authResult;
+
   const formData = await request.formData();
   const plan = formData.get("plan");
   
@@ -31,22 +35,40 @@ export const action = async ({ request }) => {
   }
 
   try {
-    await billing.request({
-      plan: plan,
+    const requestUrl = new URL(request.url);
+    const shop = requestUrl.searchParams.get("shop") || session.shop;
+    const returnUrl = `${requestUrl.protocol}//${requestUrl.host}/app/templates?shop=${shop}`;
+    
+    await billing.require({
+      plans: [plan],
       isTest: true,
+      onFailure: async () => billing.request({
+        plan: plan,
+        isTest: true,
+        returnUrl: returnUrl,
+      }),
     });
+    
+    // If we reach here, they already have the plan
+    return Response.json({ success: true, plan });
   } catch (error) {
-    if (error instanceof Response || (error && error.status)) {
+    if (error instanceof Response) {
+      // Re-throw the redirect response so React Router/App Bridge can handle it natively
       throw error;
     }
-    console.error("Billing request failed:", error.message || error);
+    
+    console.error("Billing request failed:", error);
+    
+    let errorDetails = error?.message || String(error);
+    try {
+      errorDetails += "\n\n" + JSON.stringify(error, Object.getOwnPropertyNames(error), 2);
+    } catch (e) {}
+
     return Response.json({ 
       success: false, 
-      billingError: error.errorData ? JSON.stringify(error.errorData, null, 2) : (error.message || "Unknown error")
+      billingError: errorDetails
     });
   }
-  
-  return null;
 };
 
 export const loader = async ({ request }) => {
@@ -69,21 +91,12 @@ export const loader = async ({ request }) => {
   }
 };
 
-import { useActionData, useNavigation, useLoaderData } from "react-router";
-
 export default function PricingRoute() {
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting" || navigation.state === "loading";
-  
-  const submittingPlan = navigation.formData?.get("plan");
   const loaderData = useLoaderData();
   const activePlan = loaderData?.activePlan || 'Free';
   
-  return <Pricing isSubmitting={isSubmitting} submittingPlan={submittingPlan} activePlan={activePlan} />;
+  return <Pricing activePlan={activePlan} />;
 }
-
-import { boundary } from "@shopify/shopify-app-react-router/server";
-import { useRouteError } from "react-router";
 
 export function ErrorBoundary() {
   return boundary.error(useRouteError());
