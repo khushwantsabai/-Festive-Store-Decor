@@ -25,23 +25,7 @@ export async function loader({ request }) {
     activePlan = 'Free';
   }
 
-  // Enforce access control for editor
-  if (templateParam) {
-    const getRequiredPlan = (name) => {
-      if (name === 'Merry Christmas' || name === 'Christmas Popup') return null;
-      if (['Happy Diwali', 'Spin & Win Popup', 'Exit Intent Popup'].includes(name)) return 'Starter Plan';
-      if (['Valentine', 'Cyber Monday', 'New Year Popup', 'Flash Sale Popup'].includes(name)) return 'Pro Plan';
-      return 'Enterprise Plan';
-    };
-    
-    const requiredPlan = getRequiredPlan(templateParam);
-    if (requiredPlan) {
-      const planRanks = { 'Free': 0, 'Starter Plan': 1, 'Pro Plan': 2, 'Enterprise Plan': 3 };
-      if ((planRanks[activePlan] || 0) < planRanks[requiredPlan]) {
-        return redirect('/app/pricing');
-      }
-    }
-  }
+  // Access control removed from loader to allow previewing in the editor
 
   let draftData = null;
   if (draftId) {
@@ -92,6 +76,45 @@ export async function action({ request }) {
       });
     }
     return { success: true, message: `Draft saved for ${templateName}`, draftId: savedDraft.id };
+  }
+
+  // Enforce access control for publishing
+  const getRequiredPlan = (name) => {
+    if (name === 'Merry Christmas' || name === 'Christmas Popup') return null;
+    if (['Happy Diwali', 'Spin & Win Popup', 'Exit Intent Popup'].includes(name)) return 'Starter Plan';
+    if (['Valentine', 'Cyber Monday', 'New Year Popup', 'Flash Sale Popup'].includes(name)) return 'Pro Plan';
+    return 'Enterprise Plan';
+  };
+  
+  const requiredPlan = getRequiredPlan(templateName);
+  if (requiredPlan) {
+    let activePlan = 'Free';
+    try {
+      const { billing } = await authenticate.admin(request);
+      const billingCheck = await billing.check({
+        plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+        isTest: true,
+      });
+      
+      // Fuzzy matching just in case the plan names don't exactly match
+      if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
+        const subName = billingCheck.appSubscriptions[0].name.toLowerCase();
+        if (subName.includes('enterprise')) activePlan = 'Enterprise Plan';
+        else if (subName.includes('pro')) activePlan = 'Pro Plan';
+        else if (subName.includes('starter')) activePlan = 'Starter Plan';
+        else activePlan = billingCheck.appSubscriptions[0].name;
+      }
+    } catch (error) {
+      activePlan = 'Free';
+    }
+
+    const planRanks = { 'Free': 0, 'Starter Plan': 1, 'Pro Plan': 2, 'Enterprise Plan': 3 };
+    const currentRank = planRanks[activePlan] || 0;
+    const requiredRank = planRanks[requiredPlan] || 0;
+    
+    if (currentRank < requiredRank) {
+      return { error: `Upgrade required! You need the ${requiredPlan} to publish this template. Please upgrade your plan in the Pricing tab.` };
+    }
   }
 
   // Publish: Update the Metafield
