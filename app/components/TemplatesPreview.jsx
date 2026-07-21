@@ -449,8 +449,8 @@ export default function TemplatesPreview({ onPublish, isPublishing, actionData, 
               {(() => {
                 const getRequiredPlan = (name) => {
                   if (name === 'Merry Christmas' || name === 'Christmas Popup') return null;
-                  if (['Happy Diwali', 'Spin & Win Popup', 'Exit Intent Popup'].includes(name)) return 'Starter Plan';
-                  if (['Valentine', 'Cyber Monday', 'New Year Popup', 'Flash Sale Popup'].includes(name)) return 'Pro Plan';
+                  if (['Happy Diwali', 'Black Friday Sale', 'Spin & Win Popup', 'Exit Intent Popup'].includes(name)) return 'Starter Plan';
+                  if (['Valentine', 'Cyber Monday Sale', 'New Year Popup', 'Flash Sale Popup'].includes(name)) return 'Pro Plan';
                   return 'Enterprise Plan';
                 };
                 const requiredPlan = getRequiredPlan(previewTemplate);
