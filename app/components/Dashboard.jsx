@@ -6,6 +6,7 @@ export default function Dashboard({ drafts = [] }) {
   const navigate = useNavigate();
   const submit = useSubmit();
   const [showOnboarding, setShowOnboarding] = useState(true);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem', height: '100%', position: 'relative' }}>
@@ -245,34 +246,52 @@ export default function Dashboard({ drafts = [] }) {
                     <Edit3 size={18} />
                     Resume Editing
                   </Link>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this template?')) {
-                        const formData = new FormData();
-                        formData.append('intent', 'delete');
-                        formData.append('draftId', draft.id);
-                        submit(formData, { method: 'post' });
-                      }
-                    }}
-                    style={{
-                      background: '#FEE2E2',
-                      color: '#DC2626',
-                      padding: '0.75rem',
-                      borderRadius: '8px',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      transition: 'background 0.2s'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = '#FECACA'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = '#FEE2E2'}
-                    title="Delete"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  {confirmDeleteId === draft.id ? (
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const formData = new FormData();
+                          formData.append('intent', 'delete');
+                          formData.append('draftId', draft.id);
+                          submit(formData, { method: 'post' });
+                          setConfirmDeleteId(null);
+                        }}
+                        style={{ background: '#DC2626', color: 'white', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.875rem' }}
+                      >
+                        Yes, Delete
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(null)}
+                        style={{ background: '#F1F5F9', color: '#475569', padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.875rem' }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(draft.id)}
+                      style={{
+                        background: '#FEE2E2',
+                        color: '#DC2626',
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = '#FECACA'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = '#FEE2E2'}
+                      title="Delete"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
