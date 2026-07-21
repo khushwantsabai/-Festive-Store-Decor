@@ -63,6 +63,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
 
   const draftData = loaderData?.draftData;
 
+  const defaultTitleText = draftData?.titleText ?? (isPopup ? popupTitle : title);
   const defaultTextContent = draftData?.textContent ?? (isPopup ? popupSubtitle : subtitle);
   const defaultButtonText = draftData?.buttonText ?? (isPopup ? (templateName.includes('Flash') ? 'Shop Now' : 'Subscribe') : 'Shop Now');
   const defaultBgColor = draftData?.bgColor ?? (isPopup ? popupBg : heroBg);
@@ -70,6 +71,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
   const defaultTextColor = draftData?.textColor ?? (isPopup ? 'inherit' : (templateName === 'Merry Christmas' ? '#A7F3D0' : templateName === 'Happy Diwali' ? '#FDE68A' : templateName === 'Black Friday Sale' ? '#A1A1AA' : templateName === 'Valentine' ? '#BE185D' : templateName === 'Cyber Monday' ? '#E0F2FE' : templateName === 'Halloween Spooktacular' ? '#FDF4FF' : templateName === 'Spring Collection' ? '#D1FAE5' : 'inherit'));
   const defaultShowCloseButton = draftData?.showCloseButton ?? true;
 
+  const [titleText, setTitleText] = useState(defaultTitleText);
   const [textContent, setTextContent] = useState(defaultTextContent);
   const [buttonText, setButtonText] = useState(defaultButtonText);
   const [bgColor, setBgColor] = useState(defaultBgColor);
@@ -83,24 +85,26 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
 
   if (templateName !== currentTemplate) {
     setCurrentTemplate(templateName);
+    setTitleText(defaultTitleText);
     setTextContent(defaultTextContent);
     setButtonText(defaultButtonText);
     setBgColor(defaultBgColor);
     setBtnBgColor(defaultBtnBgColor);
     setTextColor(defaultTextColor);
-    setHistory([{ textContent: defaultTextContent, buttonText: defaultButtonText, bgColor: defaultBgColor, btnBgColor: defaultBtnBgColor, textColor: defaultTextColor, showCloseButton: true }]);
+    setHistory([{ titleText: defaultTitleText, textContent: defaultTextContent, buttonText: defaultButtonText, bgColor: defaultBgColor, btnBgColor: defaultBtnBgColor, textColor: defaultTextColor, showCloseButton: true }]);
     setHistoryIndex(0);
   }
 
   useEffect(() => {
     if (history.length === 0) {
-      setHistory([{ textContent: defaultTextContent, buttonText: defaultButtonText, bgColor: defaultBgColor, btnBgColor: defaultBtnBgColor, textColor: defaultTextColor, showCloseButton: true }]);
+      setHistory([{ titleText: defaultTitleText, textContent: defaultTextContent, buttonText: defaultButtonText, bgColor: defaultBgColor, btnBgColor: defaultBtnBgColor, textColor: defaultTextColor, showCloseButton: true }]);
       setHistoryIndex(0);
     }
   }, []);
 
   const updateState = (updates) => {
-    const newState = { textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, ...updates };
+    const newState = { titleText, textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, ...updates };
+    if (updates.titleText !== undefined) setTitleText(updates.titleText);
     if (updates.textContent !== undefined) setTextContent(updates.textContent);
     if (updates.buttonText !== undefined) setButtonText(updates.buttonText);
     if (updates.bgColor !== undefined) setBgColor(updates.bgColor);
@@ -117,6 +121,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
   const handleUndo = () => {
     if (historyIndex > 0) {
       const prevState = history[historyIndex - 1];
+      setTitleText(prevState.titleText);
       setTextContent(prevState.textContent);
       setButtonText(prevState.buttonText);
       setBgColor(prevState.bgColor);
@@ -130,6 +135,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
   const handleRedo = () => {
     if (historyIndex < history.length - 1) {
       const nextState = history[historyIndex + 1];
+      setTitleText(nextState.titleText);
       setTextContent(nextState.textContent);
       setButtonText(nextState.buttonText);
       setBgColor(nextState.bgColor);
@@ -176,7 +182,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button 
                 disabled={isSubmitting}
-                onClick={() => submit({ templateName, actionType: 'draft', textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, draftId: draftData?.id || '' }, { method: 'post' })}
+                onClick={() => submit({ templateName, actionType: 'draft', titleText, textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, draftId: draftData?.id || '' }, { method: 'post' })}
                 className="btn btn-outline" 
                 style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }}
               >
@@ -184,7 +190,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
               </button>
               <button 
                 disabled={isSubmitting}
-                onClick={() => submit({ templateName, actionType: 'publish', textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, draftId: draftData?.id || '' }, { method: 'post' })}
+                onClick={() => submit({ templateName, actionType: 'publish', titleText, textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, draftId: draftData?.id || '' }, { method: 'post' })}
                 className="btn btn-primary" 
                 style={{ padding: '0.25rem 0.75rem', fontSize: '0.875rem' }}
               >
@@ -236,7 +242,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
                        templateName === 'Spring Collection' ? '🌸' : '✨'}
                     </span>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: viewMode === 'desktop' ? 'flex-start' : 'center', gap: '0.5rem' }}>
-                      <h2 style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 'bold', margin: 0, color: titleColor }}>{title}</h2>
+                      <h2 style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 'bold', margin: 0, color: titleColor }}>{titleText}</h2>
                       <p style={{ fontSize: 'clamp(1rem, 4vw, 1.2rem)', color: textColor, margin: 0, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{textContent}</p>
                       <button style={{ backgroundColor: btnBgColor, color: titleColor, border: `1px solid ${titleColor}`, padding: '0.4rem 1rem', borderRadius: '4px', fontWeight: 'bold', marginTop: '0.5rem', cursor: 'pointer', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{buttonText}</button>
                     </div>
@@ -250,7 +256,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10 }}>
                 <div style={{ width: '350px', backgroundColor: bgColor, color: popupColor, padding: '2rem', borderRadius: '12px', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)', border: bgColor === '#F8FAFC' ? '1px solid #E2E8F0' : 'none', position: 'relative' }}>
                   {showCloseButton && <span style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>❌</span>}
-                  <h3 style={{ fontSize: '1.5rem', margin: '0 0 1rem 0', color: bgColor === '#F8FAFC' ? '#DC2626' : 'inherit' }}>{popupTitle}</h3>
+                  <h3 style={{ fontSize: '1.5rem', margin: '0 0 1rem 0', color: bgColor === '#F8FAFC' ? '#DC2626' : 'inherit' }}>{titleText}</h3>
                   <span style={{ fontSize: '4rem' }}>{popupIcon}</span>
                   <p style={{ margin: '1rem 0', color: textColor, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{textContent}</p>
                   <div style={{ marginTop: '1rem' }}>
@@ -276,6 +282,15 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
             <p style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '1rem' }}>{isPopup ? 'Popup Content' : 'Banner'}</p>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.875rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Title Text</label>
+                <input 
+                  onChange={(e) => updateState({ titleText: e.target.value })}
+                  type="text" 
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0' }} 
+                  value={titleText} 
+                />
+              </div>
               <div>
                 <label style={{ display: 'block', marginBottom: '0.25rem', color: 'var(--text-muted)' }}>Text Content</label>
                 <textarea 

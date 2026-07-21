@@ -10,6 +10,7 @@
   {% endif %}
 {% else %}
 
+  {% assign titleText = config.titleText | default: active_template %}
   {% assign textContent = config.textContent %}
   {% assign buttonText = config.buttonText %}
   {% assign bgColor = config.bgColor %}
@@ -31,9 +32,8 @@
       {% endif %}
       
       <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">
-        {% if textContent != blank %}{{ textContent }}{% else %}{{ active_template }}{% endif %}
+        {{ titleText }}
       </h3>
-      
       {% case active_template %}
         {% when 'Christmas Popup' %}<div style="font-size: 40px; margin: 10px 0;">🎅</div>
         {% when 'Spin & Win Popup' %}<div style="font-size: 40px; margin: 10px 0;">🎡</div>
@@ -44,6 +44,10 @@
         {% when 'Free Shipping Popup' %}<div style="font-size: 40px; margin: 10px 0;">🚚</div>
         {% when 'Newsletter Popup' %}<div style="font-size: 40px; margin: 10px 0;">✉️</div>
       {% endcase %}
+      
+      {% if textContent != blank %}
+      <p style="margin: 10px 0; font-size: 14px; word-break: break-word;">{{ textContent }}</p>
+      {% endif %}
       
       <input type="email" placeholder="Enter your email" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;" />
       <button style="width: 100%; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; color: inherit;
@@ -72,8 +76,11 @@
 
       <div>
         <h2 style="margin: 0; font-size: 1.5rem; font-weight: bold;">
-          {% if textContent != blank %}{{ textContent }}{% else %}{{ active_template }}{% endif %}
+          {{ titleText }}
         </h2>
+        {% if textContent != blank %}
+        <p style="margin: 5px 0 10px 0; font-size: 1rem; word-break: break-word;">{{ textContent }}</p>
+        {% endif %}
         {% if buttonText != blank %}
         <button style="margin-top: 10px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: inherit;
         {% if btnBgColor != blank %}background-color: {{ btnBgColor }};{% else %}background: rgba(255,255,255,0.2);{% endif %}

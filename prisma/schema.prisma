@@ -38,6 +38,7 @@ model TemplateDraft {
   id              String   @id @default(uuid())
   shop            String
   templateName    String
+  titleText       String?
   textContent     String
   buttonText      String
   bgColor         String

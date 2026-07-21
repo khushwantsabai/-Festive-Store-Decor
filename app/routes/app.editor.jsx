@@ -46,6 +46,7 @@ export async function action({ request }) {
   const formData = await request.formData();
   const templateName = formData.get('templateName');
   const actionType = formData.get('actionType'); // 'publish' or 'draft'
+  const titleText = formData.get('titleText');
   const textContent = formData.get('textContent');
   const buttonText = formData.get('buttonText');
   const bgColor = formData.get('bgColor');
@@ -59,13 +60,14 @@ export async function action({ request }) {
     if (draftId) {
       savedDraft = await prisma.templateDraft.update({
         where: { id: draftId },
-        data: { textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, templateName }
+        data: { titleText, textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton, templateName }
       });
     } else {
       savedDraft = await prisma.templateDraft.create({
         data: {
           shop: session.shop,
           templateName,
+          titleText,
           textContent,
           buttonText,
           bgColor,
@@ -141,7 +143,7 @@ export async function action({ request }) {
             namespace: "festive",
             key: "template_config",
             type: "json",
-            value: JSON.stringify({ templateName, textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton }),
+            value: JSON.stringify({ templateName, titleText, textContent, buttonText, bgColor, btnBgColor, textColor, showCloseButton }),
             ownerId: appInstallationId
           }
         ]
