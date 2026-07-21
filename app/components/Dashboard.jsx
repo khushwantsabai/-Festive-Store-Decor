@@ -112,7 +112,7 @@ export default function Dashboard({ drafts = [] }) {
       )}
 
       {/* Premium Hero Section */}
-      <div style={{ 
+      <div className="responsive-hero" style={{ 
         background: 'rgba(255, 255, 255, 0.7)',
         backdropFilter: 'blur(20px)',
         border: '1px solid rgba(255, 255, 255, 0.4)',

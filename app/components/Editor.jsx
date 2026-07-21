@@ -163,8 +163,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
           <strong>Error:</strong> {actionData.error}
         </div>
       )}
-      
-      <div className="card" style={{ padding: '0', display: 'flex', overflow: 'hidden', height: 'auto', minHeight: '600px', flexWrap: 'wrap' }}>
+      <div className="card responsive-editor-layout" style={{ padding: '0', display: 'flex', overflow: 'hidden', height: 'auto', minHeight: '600px', flexWrap: 'wrap' }}>
         
         {/* Center Canvas Panel */}
         <div style={{ flex: '1 1 60%', minWidth: '300px', backgroundColor: '#F1F5F9', display: 'flex', flexDirection: 'column' }}>
@@ -274,7 +273,7 @@ export default function Editor({ submit, actionData, isSubmitting, loaderData })
         </div>
 
         {/* Right Settings Panel */}
-        <div style={{ minWidth: '250px', flex: '1 1 250px', borderLeft: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column' }}>
+        <div className="responsive-sidebar" style={{ minWidth: '250px', flex: '1 1 250px', borderLeft: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column' }}>
           <div style={{ padding: '1rem', borderBottom: '1px solid #E2E8F0' }}>
             <h3 style={{ fontSize: '0.875rem', fontWeight: 'bold', color: 'var(--text-dark)' }}>Element Settings</h3>
           </div>

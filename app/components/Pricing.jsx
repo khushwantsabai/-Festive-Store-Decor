@@ -16,7 +16,7 @@ export default function Pricing({ activePlan = 'Free' }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem 0' }}>
+    <div className="responsive-pricing" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem 0' }}>
       {errorMsg && (
         <div style={{ backgroundColor: '#FEE2E2', border: '1px solid #EF4444', color: '#B91C1C', padding: '1rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '1rem', margin: '0 auto', maxWidth: '600px' }}>
           <AlertCircle size={24} style={{ flexShrink: 0 }} />
