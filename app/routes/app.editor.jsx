@@ -16,7 +16,7 @@ export async function loader({ request }) {
   try {
     const billingCheck = await billing.check({
       plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: true,
+      isTest: false,
     });
     if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
       activePlan = billingCheck.appSubscriptions[0].name;
@@ -95,7 +95,7 @@ export async function action({ request }) {
       const { billing } = await authenticate.admin(request);
       const billingCheck = await billing.check({
         plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-        isTest: true,
+        isTest: false,
       });
       
       // Fuzzy matching just in case the plan names don't exactly match

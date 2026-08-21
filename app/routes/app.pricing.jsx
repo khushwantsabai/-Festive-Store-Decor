@@ -15,13 +15,13 @@ export const action = async ({ request }) => {
 
   const billingCheck = await billing.check({
     plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-    isTest: true,
+    isTest: false,
   });
 
   if (plan === 'Free') {
     if (billingCheck.hasActivePayment) {
       for (const sub of billingCheck.appSubscriptions) {
-        await billing.cancel({ subscriptionId: sub.id, isTest: true, prorate: true });
+        await billing.cancel({ subscriptionId: sub.id, isTest: false, prorate: true });
       }
     }
     return Response.json({ success: true, plan: 'Free' });
@@ -41,10 +41,10 @@ export const action = async ({ request }) => {
     
     await billing.require({
       plans: [plan],
-      isTest: true,
+      isTest: false,
       onFailure: async () => billing.request({
         plan: plan,
-        isTest: true,
+        isTest: false,
         returnUrl: returnUrl,
       }),
     });
@@ -77,7 +77,7 @@ export const loader = async ({ request }) => {
   try {
     const billingCheck = await billing.check({
       plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: true,
+      isTest: false,
     });
     
     let activePlan = 'Free';

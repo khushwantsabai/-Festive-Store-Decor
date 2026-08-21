@@ -65,7 +65,7 @@ export async function loader({ request }) {
   try {
     const billingCheck = await billing.check({
       plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: true,
+      isTest: false,
     });
     
     let activePlan = 'Free';
