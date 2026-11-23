@@ -74,7 +74,7 @@ export default function Pricing({ activePlan = 'Free' }) {
           </div>
           <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Unlock more templates, effects, and campaigns to boost seasonal sales.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
-            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$19</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
+            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$49</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
             disabled={isSubmitting || activePlan === 'Starter Plan'}
@@ -105,7 +105,7 @@ export default function Pricing({ activePlan = 'Free' }) {
           </div>
           <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Advanced features for high-volume merchants.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
-            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$23</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
+            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$79</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
             disabled={isSubmitting || activePlan === 'Pro Plan'}
@@ -136,7 +136,7 @@ export default function Pricing({ activePlan = 'Free' }) {
           </div>
           <p style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1.5rem', minHeight: '40px' }}>Custom festive decorations, dedicated support, and multi-store setups.</p>
           <div style={{ margin: '0 0 2rem 0' }}>
-            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$25</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
+            <span style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0F172A' }}>$99</span> <span style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>/ month</span>
           </div>
           <button 
             disabled={isSubmitting || activePlan === 'Enterprise Plan'}
