@@ -13,28 +13,28 @@ export const action = async ({ request }) => {
   
   if (!plan) return null;
 
-  const billingCheck = await billing.check({
-    plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-    isTest: false,
-  });
+  try {
+    const billingCheck = await billing.check({
+      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+      isTest: false,
+    });
 
-  if (plan === 'Free') {
-    if (billingCheck.hasActivePayment) {
-      for (const sub of billingCheck.appSubscriptions) {
-        await billing.cancel({ subscriptionId: sub.id, isTest: false, prorate: true });
+    if (plan === 'Free') {
+      if (billingCheck.hasActivePayment && billingCheck.appSubscriptions) {
+        for (const sub of billingCheck.appSubscriptions) {
+          await billing.cancel({ subscriptionId: sub.id, isTest: false, prorate: true });
+        }
+      }
+      return Response.json({ success: true, plan: 'Free' });
+    }
+
+    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions?.length > 0) {
+      const activePlan = billingCheck.appSubscriptions[0]?.name;
+      if (activePlan === plan) {
+        return Response.json({ success: true, plan });
       }
     }
-    return Response.json({ success: true, plan: 'Free' });
-  }
 
-  if (billingCheck.hasActivePayment) {
-    const activePlan = billingCheck.appSubscriptions[0].name;
-    if (activePlan === plan) {
-      return Response.json({ success: true, plan });
-    }
-  }
-
-  try {
     const requestUrl = new URL(request.url);
     const shop = requestUrl.searchParams.get("shop") || session.shop;
     const returnUrl = `${requestUrl.protocol}//${requestUrl.host}/app/templates?shop=${shop}`;
