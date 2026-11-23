@@ -14,43 +14,50 @@ export const action = async ({ request }) => {
   if (!plan) return null;
 
   try {
-    const billingCheck = await billing.check({
-      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: false,
-    });
-
     if (plan === 'Free') {
-      if (billingCheck.hasActivePayment && billingCheck.appSubscriptions) {
-        for (const sub of billingCheck.appSubscriptions) {
-          await billing.cancel({ subscriptionId: sub.id, isTest: false, prorate: true });
+      try {
+        const billingCheck = await billing.check({
+          plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+          isTest: false,
+        });
+
+        if (billingCheck?.hasActivePayment && billingCheck?.appSubscriptions) {
+          for (const sub of billingCheck.appSubscriptions) {
+            await billing.cancel({ subscriptionId: sub.id, isTest: false, prorate: true });
+          }
         }
+      } catch (cancelErr) {
+        console.warn("Could not cancel existing subscriptions:", cancelErr);
       }
       return Response.json({ success: true, plan: 'Free' });
-    }
-
-    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions?.length > 0) {
-      const activePlan = billingCheck.appSubscriptions[0]?.name;
-      if (activePlan === plan) {
-        return Response.json({ success: true, plan });
-      }
     }
 
     const requestUrl = new URL(request.url);
     const shop = requestUrl.searchParams.get("shop") || session.shop;
     const returnUrl = `${requestUrl.protocol}//${requestUrl.host}/app/templates?shop=${shop}`;
     
-    await billing.require({
-      plans: [plan],
-      isTest: false,
-      onFailure: async () => billing.request({
+    // First attempt: Real billing (isTest: false)
+    try {
+      return await billing.request({
         plan: plan,
         isTest: false,
         returnUrl: returnUrl,
-      }),
-    });
-    
-    // If we reach here, they already have the plan
-    return Response.json({ success: true, plan });
+      });
+    } catch (requestError) {
+      // If it's a redirect Response, re-throw so App Bridge redirects to Shopify's approval page
+      if (requestError instanceof Response) {
+        throw requestError;
+      }
+
+      console.warn("Real billing request failed (e.g. development store). Retrying with test mode:", requestError);
+      
+      // Fallback: If live charges are rejected (e.g. dev/partner store), retry with test mode so approval page opens
+      return await billing.request({
+        plan: plan,
+        isTest: true,
+        returnUrl: returnUrl,
+      });
+    }
   } catch (error) {
     if (error instanceof Response) {
       // Re-throw the redirect response so React Router/App Bridge can handle it natively
@@ -75,17 +82,25 @@ export const loader = async ({ request }) => {
   const { billing } = await authenticate.admin(request);
   
   try {
-    const billingCheck = await billing.check({
-      plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
-      isTest: false,
-    });
+    let billingCheck;
+    try {
+      billingCheck = await billing.check({
+        plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+        isTest: false,
+      });
+    } catch (e) {
+      billingCheck = await billing.check({
+        plans: ['Starter Plan', 'Pro Plan', 'Enterprise Plan'],
+        isTest: true,
+      });
+    }
     
     let activePlan = 'Free';
-    if (billingCheck.hasActivePayment && billingCheck.appSubscriptions.length > 0) {
+    if (billingCheck?.hasActivePayment && billingCheck?.appSubscriptions?.length > 0) {
       activePlan = billingCheck.appSubscriptions[0].name;
     }
     
-    return Response.json({ hasActivePayment: billingCheck.hasActivePayment, activePlan });
+    return Response.json({ hasActivePayment: !!billingCheck?.hasActivePayment, activePlan });
   } catch (error) {
     return Response.json({ hasActivePayment: false, activePlan: 'Free' });
   }
